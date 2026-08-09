@@ -6,6 +6,8 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-09
+
 ### Fixed
 
 - Die Schließen-Schaltfläche des Hilfefensters bleibt aktiv und schließt das nichtmodale Fenster zuverlässig.
