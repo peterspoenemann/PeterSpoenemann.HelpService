@@ -28,8 +28,7 @@
             </StackPanel>
 
             <Button DockPanel.Dock="Right"
-                    Command="{x:Static SystemCommands.CloseWindowCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Click="CloseButton_Click"
                     Content="{Binding CloseButtonText}"
                     MinWidth="100"
                     Padding="14,5" />

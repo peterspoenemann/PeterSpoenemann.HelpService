@@ -17,4 +17,6 @@ public partial class ContextHelpDialog : Window
         InitializeComponent();
         DataContext = viewModel;
     }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 }

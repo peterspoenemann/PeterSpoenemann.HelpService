@@ -6,6 +6,10 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Die Schließen-Schaltfläche des Hilfefensters bleibt aktiv und schließt das nichtmodale Fenster zuverlässig.
+
 ### Added
 
 - Deutsche, englische und polnische Hilfethemen, Oberflächentexte und Meldungen.
