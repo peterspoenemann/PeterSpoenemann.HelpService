@@ -20,7 +20,13 @@ public static class HelpLanguageCodes
     /// </summary>
     public const string Polish = "pl";
 
-    internal static bool TryNormalize(string? language, out string normalized)
+    /// <summary>
+    /// Normalisiert einen unterstützten Sprachcode.
+    /// </summary>
+    /// <param name="language">Der zu prüfende Sprachcode.</param>
+    /// <param name="normalized">Der normalisierte Sprachcode, sofern er unterstützt wird.</param>
+    /// <returns><see langword="true"/>, wenn der Sprachcode unterstützt wird.</returns>
+    public static bool TryNormalize(string? language, out string normalized)
     {
         normalized = language?.Trim().ToLowerInvariant() ?? string.Empty;
         return normalized is German or English or Polish;

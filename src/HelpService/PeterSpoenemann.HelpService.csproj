@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <AssemblyName>PeterSpoenemann.HelpService</AssemblyName>
+    <RootNamespace>PeterSpoenemann.HelpService</RootNamespace>
+
+    <PackageId>PeterSpoenemann.HelpService</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>Peter Spönemann</Authors>
+    <Copyright>Copyright © 2026 Peter Spönemann</Copyright>
+    <Description>Wiederverwendbare WPF-Hilfebibliothek für Markdown-Inhalte mit Inhaltsverzeichnis, Volltextsuche und WebView2-Anzeige.</Description>
+    <PackageTags>wpf;help;markdown;webview2;dotnet</PackageTags>
+    <PackageProjectUrl>https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../HelpService.Core/PeterSpoenemann.HelpService.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+  </ItemGroup>
+
+</Project>

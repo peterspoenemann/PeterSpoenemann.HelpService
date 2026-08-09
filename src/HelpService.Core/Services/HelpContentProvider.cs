@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using PeterSpoenemann.HelpService.Models;
 using PeterSpoenemann.HelpService.Resources;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace PeterSpoenemann.HelpService.Services;
 
@@ -22,6 +23,26 @@ public sealed class HelpContentProvider : IHelpContentProvider
     private readonly IReadOnlyList<HelpTopic> _orderedTopics;
     private readonly string language;
     private readonly ILogger<HelpContentProvider> logger;
+
+    /// <summary>
+    /// Initialisiert einen Inhaltsanbieter für eine deutsche Hilfe-Wurzeldatei ohne verpflichtende
+    /// Logging-Konfiguration.
+    /// </summary>
+    /// <param name="helpFilePath">Der vollständige oder relative Pfad zur Hilfe-Wurzeldatei.</param>
+    public HelpContentProvider(string helpFilePath)
+        : this(helpFilePath, HelpLanguageCodes.German, NullLogger<HelpContentProvider>.Instance)
+    {
+    }
+
+    /// <summary>
+    /// Initialisiert einen Inhaltsanbieter für eine bestimmte Sprache ohne verpflichtende Logging-Konfiguration.
+    /// </summary>
+    /// <param name="helpFilePath">Der vollständige oder relative Pfad zur Hilfe-Wurzeldatei.</param>
+    /// <param name="language">Der Sprachcode <c>de</c>, <c>en</c> oder <c>pl</c>.</param>
+    public HelpContentProvider(string helpFilePath, string language)
+        : this(helpFilePath, language, NullLogger<HelpContentProvider>.Instance)
+    {
+    }
 
     /// <summary>
     /// Testbarer Konstruktor mit explizitem Wurzel-Dateipfad statt <see cref="AppContext.BaseDirectory"/>.

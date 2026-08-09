@@ -6,6 +6,20 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+
+- Plattformneutrales Assembly und NuGet-Paket `PeterSpoenemann.HelpService.Core` zum Laden von
+  Markdown-Hilfethemen, Bereitstellen der Inhaltsverzeichnisdaten und Erzeugen vollständiger HTML-Dokumente.
+- Direkte `HelpContentProvider`-Konstruktoren ohne verpflichtende Logging-Konfiguration für die Nutzung
+  beispielsweise in Webanwendungen.
+
+### Changed
+
+- Das WPF-Paket verwendet den ausgelagerten Core intern und behält seine bisherige öffentliche API über
+  unveränderte Namespaces und Typweiterleitungen bei.
+- Die Quellcodes von Core und WPF liegen wartungsfreundlich in den unabhängigen Projektverzeichnissen
+  `src/HelpService.Core` und `src/HelpService` ohne verlinkte Dateien oder nachträgliche Compile-Ausschlüsse.
+
 ## [0.2.0] - 2026-08-09
 
 ### Fixed

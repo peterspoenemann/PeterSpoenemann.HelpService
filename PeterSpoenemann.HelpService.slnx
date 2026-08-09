@@ -1,8 +1,10 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/PeterSpoenemann.HelpService.csproj" />
+    <Project Path="src/HelpService.Core/PeterSpoenemann.HelpService.Core.csproj" />
+    <Project Path="src/HelpService/PeterSpoenemann.HelpService.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/PeterSpoenemann.HelpService.Core.Tests/PeterSpoenemann.HelpService.Core.Tests.csproj" />
     <Project Path="tests/PeterSpoenemann.HelpService.Tests/PeterSpoenemann.HelpService.Tests.csproj" />
   </Folder>
   <Folder Name="/samples/">

@@ -8,10 +8,15 @@ Markdown-Themen mit `!include`-Unterstützung, rendert das aktive Thema mit Mark
 als statisches HTML und zeigt es in einem WebView2-Hilfefenster an. Das Fenster
 enthält Inhaltsverzeichnis, Volltextsuche sowie Zurück-/Vorwärts-Navigation.
 
+Der plattformneutrale Kern liegt im separaten Assembly und NuGet-Paket
+`PeterSpoenemann.HelpService.Core`. Er enthält keine WPF- oder WebView2-Abhängigkeit und kann
+dieselben Hilfequellen beispielsweise für ASP.NET-Core- oder andere Weboberflächen laden.
+
 ## Voraussetzungen
 
-- Windows und eine WPF-Anwendung auf .NET 10
-- installierte [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
+- Für `PeterSpoenemann.HelpService.Core`: .NET 10
+- Für `PeterSpoenemann.HelpService`: Windows und eine WPF-Anwendung auf .NET 10 sowie die
+  installierte [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
 
 ## Installation
 
@@ -20,6 +25,37 @@ Nach der Veröffentlichung auf NuGet.org:
 ```powershell
 dotnet add package PeterSpoenemann.HelpService
 ```
+
+Für eine Oberfläche ohne WPF kann ausschließlich der Kern installiert werden:
+
+```powershell
+dotnet add package PeterSpoenemann.HelpService.Core
+```
+
+Das WPF-Paket referenziert das Core-Paket automatisch. Bestehende Anwendungen behalten ihre bisherigen
+Namespaces und APIs; eine zusätzliche Core-Referenz ist dort nicht erforderlich.
+
+## Plattformneutralen Core verwenden
+
+`HelpContentProvider` lädt die Themen und liefert mit `GetAllTopics()` die stabil sortierten Daten für
+ein Inhaltsverzeichnis. `MarkdownHelpDocumentBuilder` erzeugt aus dem ausgewählten Thema ein vollständiges
+HTML-Dokument. Beide APIs verwenden dieselben Namespaces wie im WPF-Paket:
+
+```csharp
+using PeterSpoenemann.HelpService;
+using PeterSpoenemann.HelpService.Services;
+
+var content = new HelpContentProvider("Help/ContextHelp.en.md", HelpLanguageCodes.English);
+var renderer = new MarkdownHelpDocumentBuilder();
+
+var tableOfContents = content.GetAllTopics();
+var topic = content.GetTopic("settings");
+var html = renderer.BuildHtml(topic.Markdown, HelpLanguageCodes.English);
+```
+
+`tableOfContents` enthält pro Thema ID, Titel, Markdown-Inhalt und Gruppenname. Eine Weboberfläche kann
+daraus Navigation und Suche aufbauen und `html` direkt in ihrer Inhaltsansicht ausgeben. Für Anwendungen
+mit Logging steht zusätzlich der bisherige Konstruktor mit `ILogger<HelpContentProvider>` zur Verfügung.
 
 ## Einbindung
 
@@ -200,7 +236,8 @@ Benötigt wird das .NET 10 SDK:
 dotnet restore
 dotnet build --configuration Release --no-restore
 dotnet test --configuration Release --no-build
-dotnet pack src/PeterSpoenemann.HelpService.csproj --configuration Release --no-build --output artifacts
+dotnet pack src/HelpService.Core/PeterSpoenemann.HelpService.Core.csproj --configuration Release --no-build --output artifacts
+dotnet pack src/HelpService/PeterSpoenemann.HelpService.csproj --configuration Release --no-build --output artifacts
 ```
 
 Die erzeugten `.nupkg`- und `.snupkg`-Dateien liegen danach in `artifacts`.

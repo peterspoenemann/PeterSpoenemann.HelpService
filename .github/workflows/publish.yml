@@ -10,7 +10,6 @@ permissions:
   id-token: write
 
 env:
-  PROJECT_FILE: src/PeterSpoenemann.HelpService.csproj
   DOTNET_VERSION: 10.0.x
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
 
@@ -49,12 +48,18 @@ jobs:
 
       - name: Pack
         shell: pwsh
-        run: >-
-          dotnet pack "$env:PROJECT_FILE"
-          --configuration Release
-          --no-build
-          --output ./artifacts
-          -p:PackageVersion="$env:PACKAGE_VERSION"
+        run: |
+          $projects = @(
+            "src/HelpService.Core/PeterSpoenemann.HelpService.Core.csproj",
+            "src/HelpService/PeterSpoenemann.HelpService.csproj"
+          )
+          foreach ($project in $projects) {
+            dotnet pack $project `
+              --configuration Release `
+              --no-build `
+              --output ./artifacts `
+              -p:PackageVersion="$env:PACKAGE_VERSION"
+          }
 
       - name: NuGet login
         id: nuget-login

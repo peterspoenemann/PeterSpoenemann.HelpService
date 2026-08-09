@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/PeterSpoenemann.HelpService.csproj" />
+    <ProjectReference Include="../../src/HelpService/PeterSpoenemann.HelpService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

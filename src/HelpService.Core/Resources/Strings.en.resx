@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="CyclicInclude" xml:space="preserve"><value>Circular help include detected: {0}</value></data>
+  <data name="DuplicateTopic" xml:space="preserve"><value>Duplicate help topic ID '{TopicId}' in {File}:{LineNumber} – already defined in {ExistingFile}:{ExistingLineNumber}. The first loaded definition remains active.</value></data>
+  <data name="FallbackMarkdown" xml:space="preserve"><value>No dedicated help topic is available for this area yet.&#xA;&#xA;Press **F1** or use the help button on the respective page.</value></data>
+  <data name="FallbackTitle" xml:space="preserve"><value>Help</value></data>
+  <data name="IncludeLoadError" xml:space="preserve"><value>Help topics from the include in {File}:{LineNumber} could not be loaded – all other topics remain available.</value></data>
+  <data name="InvalidHeading" xml:space="preserve"><value>Invalid help topic heading in {0}:{1}: '# {2}'.</value></data>
+  <data name="OutsideHelpRoot" xml:space="preserve"><value>Help resource is outside the Help folder: {0}</value></data>
+  <data name="RootReadError" xml:space="preserve"><value>Help root file could not be read: {HelpFile}</value></data>
+  <data name="TopicsLoaded" xml:space="preserve"><value>Loaded {TopicCount} help topics from {HelpFile}.</value></data>
+  <data name="UnsupportedLanguage" xml:space="preserve"><value>Language '{0}' is not supported. Allowed values are 'de', 'en', and 'pl'.</value></data>
+</root>
