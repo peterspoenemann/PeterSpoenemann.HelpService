@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180" role="img" aria-labelledby="title desc">
+  <title id="title">Kontextsensitive Hilfe für zwei Registerkarten</title>
+  <desc id="desc">Einstellungen und Auswertung führen jeweils zu einer eigenen Hilfeseite.</desc>
+  <rect width="720" height="180" rx="12" fill="#f8fafc"/>
+  <rect x="30" y="42" width="210" height="96" rx="8" fill="#e8f0f8" stroke="#174a7e" stroke-width="2"/>
+  <text x="135" y="82" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="19" font-weight="600" fill="#174a7e">Einstellungen</text>
+  <text x="135" y="112" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="15" fill="#374151">Thema: settings</text>
+  <path d="M255 90 H330" stroke="#0b63a8" stroke-width="4"/>
+  <path d="M320 80 L334 90 L320 100" fill="none" stroke="#0b63a8" stroke-width="4"/>
+  <circle cx="360" cy="90" r="29" fill="#0b63a8"/>
+  <text x="360" y="99" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="24" font-weight="700" fill="white">F1</text>
+  <path d="M390 90 H465" stroke="#0b63a8" stroke-width="4"/>
+  <path d="M455 80 L469 90 L455 100" fill="none" stroke="#0b63a8" stroke-width="4"/>
+  <rect x="480" y="42" width="210" height="96" rx="8" fill="#fff8e1" stroke="#b7791f" stroke-width="2"/>
+  <text x="585" y="82" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="19" font-weight="600" fill="#8a4b08">Auswertung</text>
+  <text x="585" y="112" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="15" fill="#374151">Thema: reports</text>
+</svg>

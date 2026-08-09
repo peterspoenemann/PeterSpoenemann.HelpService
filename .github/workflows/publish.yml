@@ -1,0 +1,79 @@
+name: Publish NuGet package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_FILE: src/PeterSpoenemann.HelpService.csproj
+  DOTNET_VERSION: 10.0.x
+  NUGET_SOURCE: https://api.nuget.org/v3/index.json
+
+jobs:
+  publish:
+    name: Build, test and publish
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Determine package version
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw 'Could not determine package version.'
+          }
+          "PACKAGE_VERSION=$version" >> $env:GITHUB_ENV
+          Write-Host "Publishing version $version"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+
+      - name: Pack
+        shell: pwsh
+        run: >-
+          dotnet pack "$env:PROJECT_FILE"
+          --configuration Release
+          --no-build
+          --output ./artifacts
+          -p:PackageVersion="$env:PACKAGE_VERSION"
+
+      - name: NuGet login
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish NuGet package
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: |
+          $packages = @(Get-ChildItem ./artifacts -Filter *.nupkg)
+          if ($packages.Count -eq 0) {
+            throw 'No .nupkg file found.'
+          }
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName `
+              --api-key $env:NUGET_API_KEY `
+              --source $env:NUGET_SOURCE `
+              --skip-duplicate
+          }

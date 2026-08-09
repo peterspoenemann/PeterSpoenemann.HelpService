@@ -1,0 +1,29 @@
+## .NET build outputs
+bin/
+obj/
+artifacts/
+TestResults/
+
+## IDE and user settings
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Test and coverage outputs
+coverage/
+*.coverage
+*.coveragexml
+coverage.*.xml
+
+## NuGet packages and local feeds
+*.nupkg
+*.snupkg
+packages/
+
+## OS files
+.DS_Store
+Thumbs.db

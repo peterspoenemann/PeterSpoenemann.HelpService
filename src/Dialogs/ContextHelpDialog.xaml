@@ -1,0 +1,159 @@
+<Window x:Class="PeterSpoenemann.HelpService.Dialogs.ContextHelpDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:help="clr-namespace:PeterSpoenemann.HelpService.Behaviors"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="{Binding Title, StringFormat=Hilfe – {0}}"
+        Width="1080"
+        Height="720"
+        MinWidth="800"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+
+    <DockPanel Margin="16">
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Command="{Binding GoBackCommand}"
+                        Content="← Zurück"
+                        MinWidth="90"
+                        Padding="10,5"
+                        Margin="0,0,6,0" />
+                <Button Command="{Binding GoForwardCommand}"
+                        Content="Vorwärts →"
+                        MinWidth="90"
+                        Padding="10,5" />
+            </StackPanel>
+
+            <Button DockPanel.Dock="Right"
+                    Command="{x:Static SystemCommands.CloseWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Content="Schließen"
+                    MinWidth="100"
+                    Padding="14,5" />
+        </DockPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top"
+                           Text="Hilfethemen"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#174A7E"
+                           Margin="4,0,0,8" />
+                <TextBox DockPanel.Dock="Top"
+                         Margin="0,0,0,10"
+                         Padding="7,6"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="In Titeln und Inhalten suchen" />
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Groups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,10">
+                                    <Button Content="{Binding HeaderText}"
+                                            Command="{Binding ToggleExpandCommand}"
+                                            CommandParameter="{Binding Name}"
+                                            HorizontalContentAlignment="Left"
+                                            HorizontalAlignment="Stretch"
+                                            Padding="4,3"
+                                            Margin="0,0,0,2"
+                                            BorderThickness="0"
+                                            Background="Transparent"
+                                            Cursor="Hand"
+                                            FontWeight="SemiBold"
+                                            FontSize="14"
+                                            Foreground="#6B7280" />
+                                    <ItemsControl ItemsSource="{Binding Items}"
+                                                  Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibility}}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding Title}"
+                                                        Command="{Binding DataContext.SelectTopicCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding Id}"
+                                                        HorizontalContentAlignment="Left"
+                                                        HorizontalAlignment="Stretch"
+                                                        Padding="8,5"
+                                                        Margin="0,0,0,1"
+                                                        BorderThickness="0"
+                                                        Background="Transparent"
+                                                        Cursor="Hand"
+                                                        FontSize="11">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Foreground" Value="#1F2937" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                    <Setter Property="Background" Value="#DCE6F1" />
+                                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                                    <Setter Property="Foreground" Value="#174A7E" />
+                                                                </DataTrigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#EEF2F7" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1"
+                          Width="6"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Background="#E5E7EB" />
+
+            <Grid Grid.Column="2" Margin="16,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Title}"
+                           FontSize="24"
+                           FontWeight="SemiBold"
+                           Foreground="#174A7E"
+                           Margin="4,0,4,10" />
+                <wv2:WebView2 x:Name="HelpBrowser"
+                              Grid.Row="1"
+                              DefaultBackgroundColor="White"
+                              help:WebView2Html.Content="{Binding HtmlContent}"
+                              help:WebView2Html.TopicLinkCommand="{Binding SelectTopicCommand}" />
+                <Border Grid.Row="1"
+                        Background="White"
+                        Padding="24">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=HelpBrowser, Path=(help:WebView2Html.ErrorMessage)}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <TextBlock Text="{Binding ElementName=HelpBrowser, Path=(help:WebView2Html.ErrorMessage)}"
+                               TextWrapping="Wrap"
+                               Foreground="Firebrick" />
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

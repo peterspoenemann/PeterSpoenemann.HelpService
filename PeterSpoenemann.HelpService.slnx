@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PeterSpoenemann.HelpService.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PeterSpoenemann.HelpService.Tests/PeterSpoenemann.HelpService.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/PeterSpoenemann.HelpService.Sample/PeterSpoenemann.HelpService.Sample.csproj" />
+  </Folder>
+</Solution>
