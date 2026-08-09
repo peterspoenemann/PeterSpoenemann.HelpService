@@ -6,6 +6,18 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+
+- Deutsche und englische Hilfethemen, Oberflächentexte und Meldungen.
+- Mehrere sprachgebundene Hilfe-Wurzeldateien über `HelpServiceOptions.RootHelpFiles`.
+- Laufzeit-Sprachwechsel über `IHelpLanguageService` mit `de` als Standard.
+- Zweisprachige Sample-Oberfläche mit Umschaltung zur Laufzeit.
+
+### Compatibility
+
+- `HelpServiceOptions.RootHelpFile`, `IContextHelpService.ShowHelp(...)` und
+  `IHelpDocumentBuilder.BuildHtml(string)` bleiben unverändert nutzbar.
+
 ## [0.1.0] - 2026-08-09
 
 ### Added

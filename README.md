@@ -34,6 +34,39 @@ services.AddPeterSpoenemannHelpService(options =>
 });
 ```
 
+Die bisherige Eigenschaft `RootHelpFile` bleibt vollständig unterstützt und konfiguriert die
+deutsche Hilfe. Deutsch (`de`) ist die Standardsprache.
+
+### Mehrsprachige Hilfe
+
+Für Deutsch und Englisch werden mehrere Wurzeldateien nach Sprachcode registriert:
+
+```csharp
+services.AddPeterSpoenemannHelpService(options =>
+{
+    options.RootHelpFiles[HelpLanguageCodes.German] =
+        Path.Combine("Help", "ContextHelp.de.md");
+    options.RootHelpFiles[HelpLanguageCodes.English] =
+        Path.Combine("Help", "ContextHelp.en.md");
+    options.Language = HelpLanguageCodes.German;
+    options.ApplicationName = "MeineAnwendung";
+});
+```
+
+Die Sprache kann anschließend ohne Neustart gewechselt werden. Ein bereits geöffnetes
+Hilfefenster aktualisiert dabei Oberfläche, Inhaltsverzeichnis und aktives Hilfethema:
+
+```csharp
+var languageService = serviceProvider.GetRequiredService<IHelpLanguageService>();
+
+languageService.SetLanguage(HelpLanguageCodes.English);
+languageService.SetLanguage(HelpLanguageCodes.German);
+```
+
+`IHelpLanguageService.CurrentLanguage` enthält die aktive Sprache und
+`SupportedLanguages` die tatsächlich konfigurierten Sprachen. Über `LanguageChanged`
+kann die einbindende Anwendung ihre eigene Oberfläche gleichzeitig aktualisieren.
+
 Relative Wurzelpfade werden gegen `AppContext.BaseDirectory` aufgelöst. Die
 Anwendung muss ihre Hilfequellen in die Ausgabe kopieren, beispielsweise:
 
@@ -137,7 +170,8 @@ Include- und Bildpfade werden relativ zu der Markdown-Datei aufgelöst, in der s
 
 ```text
 Help/
-    ContextHelp.de.md   -- reine !include-Liste, eine Zeile je Themendatei
+    ContextHelp.de.md   -- deutsche !include-Liste
+    ContextHelp.en.md   -- englische !include-Liste
     Topics/
         Start.md
         Einstellungen.md
@@ -172,6 +206,8 @@ Die erzeugten `.nupkg`- und `.snupkg`-Dateien liegen danach in `artifacts`.
 Unter [`samples/PeterSpoenemann.HelpService.Sample`](samples/PeterSpoenemann.HelpService.Sample)
 liegt eine kleine WPF-Anwendung mit zwei Registerkarten und kontextsensitiver Hilfe.
 Die aktive Hilfeseite wird über die Schaltfläche am unteren Fensterrand oder mit `F1` geöffnet.
+Über die Sprachauswahl kann die komplette Sample-Oberfläche einschließlich eines bereits
+geöffneten Hilfefensters zur Laufzeit zwischen Deutsch und Englisch wechseln.
 
 ```powershell
 dotnet run --project samples/PeterSpoenemann.HelpService.Sample/PeterSpoenemann.HelpService.Sample.csproj

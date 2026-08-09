@@ -17,7 +17,9 @@ public partial class App : Application
         services.AddLogging(builder => builder.AddDebug());
         services.AddPeterSpoenemannHelpService(options =>
         {
-            options.RootHelpFile = Path.Combine("Help", "ContextHelp.de.md");
+            options.RootHelpFiles[HelpLanguageCodes.German] = Path.Combine("Help", "ContextHelp.de.md");
+            options.RootHelpFiles[HelpLanguageCodes.English] = Path.Combine("Help", "ContextHelp.en.md");
+            options.Language = HelpLanguageCodes.German;
             options.ApplicationName = "PeterSpoenemann.HelpService.Sample";
         });
         services.AddSingleton<MainWindow>();

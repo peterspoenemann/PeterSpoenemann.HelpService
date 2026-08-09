@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ApplicationNameMissing" xml:space="preserve"><value>Für PeterSpoenemann.HelpService muss ein Anwendungsname angegeben werden.</value></data>
+  <data name="BackButton" xml:space="preserve"><value>← Zurück</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Schließen</value></data>
+  <data name="CyclicInclude" xml:space="preserve"><value>Zirkuläres Hilfe-Include erkannt: {0}</value></data>
+  <data name="DuplicateTopic" xml:space="preserve"><value>Doppelte Hilfethema-ID '{TopicId}' in {File}:{LineNumber} – bereits definiert in {ExistingFile}:{ExistingLineNumber}. Die zuerst geladene Definition bleibt gültig.</value></data>
+  <data name="FallbackMarkdown" xml:space="preserve"><value>Für diesen Bereich ist noch kein eigenes Hilfethema hinterlegt.&#xA;&#xA;Drücken Sie **F1** oder verwenden Sie den Hilfebutton der jeweiligen Seite.</value></data>
+  <data name="FallbackTitle" xml:space="preserve"><value>Hilfe</value></data>
+  <data name="ForwardButton" xml:space="preserve"><value>Vorwärts →</value></data>
+  <data name="HelpTopics" xml:space="preserve"><value>Hilfethemen</value></data>
+  <data name="HelpWindowTitle" xml:space="preserve"><value>Hilfe – {0}</value></data>
+  <data name="IncludeLoadError" xml:space="preserve"><value>Hilfethemen aus Include in {File}:{LineNumber} konnten nicht geladen werden – übrige Themen bleiben verfügbar.</value></data>
+  <data name="InvalidHeading" xml:space="preserve"><value>Ungültige Hilfethema-Überschrift in {0}:{1}: '# {2}'.</value></data>
+  <data name="LanguageRootMissing" xml:space="preserve"><value>Für die Sprache '{0}' muss eine Hilfe-Wurzeldatei angegeben werden.</value></data>
+  <data name="OutsideHelpRoot" xml:space="preserve"><value>Hilferessource liegt außerhalb des Help-Ordners: {0}</value></data>
+  <data name="RootReadError" xml:space="preserve"><value>Hilfe-Wurzeldatei konnte nicht gelesen werden: {HelpFile}</value></data>
+  <data name="SearchToolTip" xml:space="preserve"><value>In Titeln und Inhalten suchen</value></data>
+  <data name="TopicsLoaded" xml:space="preserve"><value>{TopicCount} Hilfethemen aus {HelpFile} geladen.</value></data>
+  <data name="UnsupportedLanguage" xml:space="preserve"><value>Die Sprache '{0}' wird nicht unterstützt. Zulässig sind 'de' und 'en'.</value></data>
+  <data name="UnsupportedOrUnavailableLanguage" xml:space="preserve"><value>Die Sprache '{0}' wird nicht unterstützt oder es wurde keine Hilfe-Wurzeldatei dafür konfiguriert.</value></data>
+  <data name="WebViewError" xml:space="preserve"><value>Die HTML-Hilfe konnte nicht angezeigt werden. Prüfen Sie die Installation der Microsoft Edge WebView2 Runtime.&#xA;&#xA;{0}</value></data>
+</root>

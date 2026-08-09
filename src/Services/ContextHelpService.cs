@@ -11,6 +11,7 @@ public sealed class ContextHelpService : IContextHelpService
 {
     private readonly IHelpContentProvider contentProvider;
     private readonly IHelpDocumentBuilder documentBuilder;
+    private readonly IHelpLanguageService languageService;
     private ContextHelpDialog? dialog;
     private ContextHelpDialogViewModel? viewModel;
 
@@ -20,9 +21,27 @@ public sealed class ContextHelpService : IContextHelpService
     /// <param name="contentProvider">Die Quelle der geladenen Hilfethemen.</param>
     /// <param name="documentBuilder">Der Renderer für Markdown-Hilfedokumente.</param>
     public ContextHelpService(IHelpContentProvider contentProvider, IHelpDocumentBuilder documentBuilder)
+        : this(
+            contentProvider,
+            documentBuilder,
+            new HelpLanguageService([HelpLanguageCodes.German], HelpLanguageCodes.German))
+    {
+    }
+
+    /// <summary>
+    /// Initialisiert den Dienst mit Themenquelle, Dokumentrenderer und Laufzeit-Sprachdienst.
+    /// </summary>
+    /// <param name="contentProvider">Die sprachabhängige Quelle der geladenen Hilfethemen.</param>
+    /// <param name="documentBuilder">Der Renderer für Markdown-Hilfedokumente.</param>
+    /// <param name="languageService">Der Dienst für die aktive Sprache und Laufzeitwechsel.</param>
+    public ContextHelpService(
+        IHelpContentProvider contentProvider,
+        IHelpDocumentBuilder documentBuilder,
+        IHelpLanguageService languageService)
     {
         this.contentProvider = contentProvider;
         this.documentBuilder = documentBuilder;
+        this.languageService = languageService;
     }
 
     /// <inheritdoc />
@@ -50,7 +69,11 @@ public sealed class ContextHelpService : IContextHelpService
             dialog.Close();
         }
 
-        var newViewModel = new ContextHelpDialogViewModel(contentProvider, documentBuilder, topicId);
+        var newViewModel = new ContextHelpDialogViewModel(
+            contentProvider,
+            documentBuilder,
+            topicId,
+            languageService);
         var newDialog = new ContextHelpDialog(newViewModel)
         {
             Owner = requestedOwner
@@ -60,6 +83,7 @@ public sealed class ContextHelpService : IContextHelpService
         dialog = newDialog;
         newDialog.Closed += (_, _) =>
         {
+            newViewModel.Dispose();
             if (ReferenceEquals(dialog, newDialog))
             {
                 dialog = null;

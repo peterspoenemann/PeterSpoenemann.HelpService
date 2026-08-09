@@ -11,7 +11,7 @@
     <RootNamespace>PeterSpoenemann.HelpService</RootNamespace>
 
     <PackageId>PeterSpoenemann.HelpService</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Peter Spönemann</Authors>
     <Copyright>Copyright © 2026 Peter Spönemann</Copyright>
     <Description>Wiederverwendbare WPF-Hilfebibliothek für Markdown-Inhalte mit Inhaltsverzeichnis, Volltextsuche und WebView2-Anzeige.</Description>

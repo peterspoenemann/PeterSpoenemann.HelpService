@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:help="clr-namespace:PeterSpoenemann.HelpService.Behaviors"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-        Title="{Binding Title, StringFormat=Hilfe – {0}}"
+        Title="{Binding WindowTitle}"
         Width="1080"
         Height="720"
         MinWidth="800"
@@ -17,12 +17,12 @@
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button Command="{Binding GoBackCommand}"
-                        Content="← Zurück"
+                        Content="{Binding BackButtonText}"
                         MinWidth="90"
                         Padding="10,5"
                         Margin="0,0,6,0" />
                 <Button Command="{Binding GoForwardCommand}"
-                        Content="Vorwärts →"
+                        Content="{Binding ForwardButtonText}"
                         MinWidth="90"
                         Padding="10,5" />
             </StackPanel>
@@ -30,7 +30,7 @@
             <Button DockPanel.Dock="Right"
                     Command="{x:Static SystemCommands.CloseWindowCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                    Content="Schließen"
+                    Content="{Binding CloseButtonText}"
                     MinWidth="100"
                     Padding="14,5" />
         </DockPanel>
@@ -44,7 +44,7 @@
 
             <DockPanel Grid.Column="0">
                 <TextBlock DockPanel.Dock="Top"
-                           Text="Hilfethemen"
+                           Text="{Binding HelpTopicsText}"
                            FontSize="18"
                            FontWeight="SemiBold"
                            Foreground="#174A7E"
@@ -53,7 +53,7 @@
                          Margin="0,0,0,10"
                          Padding="7,6"
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="In Titeln und Inhalten suchen" />
+                         ToolTip="{Binding SearchToolTip}" />
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">

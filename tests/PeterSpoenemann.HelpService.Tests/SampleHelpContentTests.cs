@@ -20,4 +20,24 @@ public sealed class SampleHelpContentTests
         Assert.Contains("data:image/svg+xml;base64,", html);
         Assert.Contains("markdown-alert-tip", html);
     }
+
+    [Fact]
+    public void EnglishSampleHelpLoadsBothTranslatedTopics()
+    {
+        var rootFile = Path.Combine(AppContext.BaseDirectory, "SampleHelp", "ContextHelp.en.md");
+        var provider = new HelpContentProvider(
+            rootFile,
+            HelpLanguageCodes.English,
+            NullLogger<HelpContentProvider>.Instance);
+
+        Assert.Equal(["settings", "reports"], provider.GetAllTopics().Select(topic => topic.Id));
+        Assert.Equal("Settings", provider.GetTopic("settings").Title);
+        Assert.Contains("Keyboard controls", provider.GetTopic("reports").Markdown);
+
+        var html = new MarkdownHelpDocumentBuilder().BuildHtml(
+            provider.GetTopic("settings").Markdown,
+            HelpLanguageCodes.English);
+        Assert.Contains("<html lang=\"en\">", html);
+        Assert.Contains("data:image/svg+xml;base64,", html);
+    }
 }

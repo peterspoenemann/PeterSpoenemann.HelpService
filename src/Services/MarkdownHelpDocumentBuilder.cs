@@ -1,6 +1,7 @@
 using System.IO;
 using Markdig;
 using Markdig.Renderers;
+using PeterSpoenemann.HelpService.Resources;
 
 namespace PeterSpoenemann.HelpService.Services;
 
@@ -15,8 +16,18 @@ public sealed class MarkdownHelpDocumentBuilder : IHelpDocumentBuilder
         .Build();
 
     /// <inheritdoc />
-    public string BuildHtml(string markdown)
+    public string BuildHtml(string markdown) => BuildHtml(markdown, HelpLanguageCodes.German);
+
+    /// <inheritdoc />
+    public string BuildHtml(string markdown, string language)
     {
+        if (!HelpLanguageCodes.TryNormalize(language, out var normalizedLanguage))
+        {
+            throw new ArgumentException(
+                HelpResources.Format("UnsupportedLanguage", HelpLanguageCodes.German, language),
+                nameof(language));
+        }
+
         using var writer = new StringWriter();
         var renderer = new HtmlRenderer(writer)
         {
@@ -27,7 +38,7 @@ public sealed class MarkdownHelpDocumentBuilder : IHelpDocumentBuilder
 
         return $$"""
             <!DOCTYPE html>
-            <html lang="de">
+            <html lang="{{normalizedLanguage}}">
             <head>
               <meta charset="utf-8">
               <meta name="color-scheme" content="light">

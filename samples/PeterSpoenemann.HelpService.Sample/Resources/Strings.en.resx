@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ColorSchemeLabel" xml:space="preserve"><value>Color scheme:</value></data>
+  <data name="DarkTheme" xml:space="preserve"><value>Dark</value></data>
+  <data name="DefaultUser" xml:space="preserve"><value>Sample user</value></data>
+  <data name="DisplayNameLabel" xml:space="preserve"><value>Display name:</value></data>
+  <data name="EnglishLanguage" xml:space="preserve"><value>English</value></data>
+  <data name="GeneratePreview" xml:space="preserve"><value>Generate preview</value></data>
+  <data name="GermanLanguage" xml:space="preserve"><value>German</value></data>
+  <data name="HelpButtonFormat" xml:space="preserve"><value>Help for “{0}” (F1)</value></data>
+  <data name="HelpHint" xml:space="preserve"><value>Help follows the active tab. You can also press F1.</value></data>
+  <data name="IncludeDetails" xml:space="preserve"><value>Include details</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Language:</value></data>
+  <data name="LightTheme" xml:space="preserve"><value>Light</value></data>
+  <data name="ProductTitle" xml:space="preserve"><value>PeterSpoenemann.HelpService – Sample</value></data>
+  <data name="ReportPlaceholder" xml:space="preserve"><value>The generated report would be displayed here.</value></data>
+  <data name="ReportsHeading" xml:space="preserve"><value>Create report</value></data>
+  <data name="ReportsTab" xml:space="preserve"><value>Report</value></data>
+  <data name="SettingsHeading" xml:space="preserve"><value>General settings</value></data>
+  <data name="SettingsTab" xml:space="preserve"><value>Settings</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>A small dialog with context-sensitive help for two tabs.</value></data>
+  <data name="SystemTheme" xml:space="preserve"><value>System setting</value></data>
+  <data name="WindowTitle" xml:space="preserve"><value>HelpService Sample</value></data>
+</root>

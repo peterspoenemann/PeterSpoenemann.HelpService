@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using PeterSpoenemann.HelpService.Models;
+using PeterSpoenemann.HelpService.Resources;
 using Microsoft.Extensions.Logging;
 
 namespace PeterSpoenemann.HelpService.Services;
@@ -19,6 +20,8 @@ public sealed class HelpContentProvider : IHelpContentProvider
 
     private readonly IReadOnlyDictionary<string, HelpTopic> _topics;
     private readonly IReadOnlyList<HelpTopic> _orderedTopics;
+    private readonly string language;
+    private readonly ILogger<HelpContentProvider> logger;
 
     /// <summary>
     /// Testbarer Konstruktor mit explizitem Wurzel-Dateipfad statt <see cref="AppContext.BaseDirectory"/>.
@@ -26,20 +29,44 @@ public sealed class HelpContentProvider : IHelpContentProvider
     /// <param name="helpFilePath">Der vollständige oder relative Pfad zur Hilfe-Wurzeldatei.</param>
     /// <param name="logger">Der Logger für Ladefehler, Warnungen und Statusinformationen.</param>
     public HelpContentProvider(string helpFilePath, ILogger<HelpContentProvider> logger)
+        : this(helpFilePath, HelpLanguageCodes.German, logger)
     {
+    }
+
+    /// <summary>
+    /// Initialisiert einen Inhaltsanbieter für eine bestimmte Sprache.
+    /// </summary>
+    /// <param name="helpFilePath">Der vollständige oder relative Pfad zur Hilfe-Wurzeldatei.</param>
+    /// <param name="language">Der Sprachcode <c>de</c> oder <c>en</c>.</param>
+    /// <param name="logger">Der Logger für Ladefehler, Warnungen und Statusinformationen.</param>
+    /// <exception cref="ArgumentException">Der Sprachcode wird nicht unterstützt.</exception>
+    public HelpContentProvider(
+        string helpFilePath,
+        string language,
+        ILogger<HelpContentProvider> logger)
+    {
+        if (!HelpLanguageCodes.TryNormalize(language, out this.language))
+        {
+            throw new ArgumentException(
+                HelpResources.Format("UnsupportedLanguage", HelpLanguageCodes.German, language),
+                nameof(language));
+        }
+
+        this.logger = logger;
         var helpRoot = Path.GetDirectoryName(Path.GetFullPath(helpFilePath))!;
         var orderedTopics = new List<HelpTopic>();
-        _topics = LoadTopics(helpFilePath, helpRoot, orderedTopics, logger);
+        _topics = LoadTopics(helpFilePath, helpRoot, orderedTopics);
         _orderedTopics = orderedTopics;
-        logger.LogInformation("{TopicCount} Hilfethemen aus {HelpFile} geladen.", _topics.Count, helpFilePath);
+        logger.LogInformation(HelpResources.Get("TopicsLoaded", this.language), _topics.Count, helpFilePath);
     }
 
     /// <inheritdoc />
     public HelpTopic GetTopic(string topicId) => _topics.TryGetValue(topicId, out var topic)
         ? topic
-        : new HelpTopic(topicId, "Hilfe",
-            "Für diesen Bereich ist noch kein eigenes Hilfethema hinterlegt.\n\n" +
-            "Drücken Sie **F1** oder verwenden Sie den Hilfebutton der jeweiligen Seite.");
+        : new HelpTopic(
+            topicId,
+            HelpResources.Get("FallbackTitle", language),
+            HelpResources.Get("FallbackMarkdown", language));
 
     /// <inheritdoc />
     public bool HasTopic(string topicId) => _topics.ContainsKey(topicId);
@@ -57,8 +84,8 @@ public sealed class HelpContentProvider : IHelpContentProvider
     /// Datei, zirkuläres Include, Pfad außerhalb des Help-Ordners, ungültige Themenüberschrift), werden nur
     /// deren Themen übersprungen - alle anderen Themen bleiben verfügbar.
     /// </summary>
-    private static IReadOnlyDictionary<string, HelpTopic> LoadTopics(
-        string rootFilePath, string helpRoot, List<HelpTopic> orderedTopics, ILogger logger)
+    private IReadOnlyDictionary<string, HelpTopic> LoadTopics(
+        string rootFilePath, string helpRoot, List<HelpTopic> orderedTopics)
     {
         var topics = new Dictionary<string, HelpTopic>(StringComparer.OrdinalIgnoreCase);
         var topicSources = new Dictionary<string, (string File, int LineNumber)>(StringComparer.OrdinalIgnoreCase);
@@ -70,7 +97,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Hilfe-Wurzeldatei konnte nicht gelesen werden: {HelpFile}", rootFilePath);
+            logger.LogError(ex, HelpResources.Get("RootReadError", language), rootFilePath);
             return topics;
         }
 
@@ -95,7 +122,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
                     var includePath = ResolveRelativePath(rootFilePath, value, helpRoot);
                     return ReadExpandedLines(includePath, helpRoot, []);
                 },
-                topics, topicSources, orderedTopics, logger, rootFilePath, lineNumber + 1);
+                topics, topicSources, orderedTopics, rootFilePath, lineNumber + 1);
         }
 
         if (inlineLines.Count > 0)
@@ -104,35 +131,33 @@ public sealed class HelpContentProvider : IHelpContentProvider
                 () => inlineLines
                     .Select(l => new SourceLine(ResolveImagePaths(l.RawLine, rootFilePath, helpRoot), rootFilePath, l.LineNumber))
                     .ToList(),
-                topics, topicSources, orderedTopics, logger, rootFilePath, inlineLines[0].LineNumber);
+                topics, topicSources, orderedTopics, rootFilePath, inlineLines[0].LineNumber);
         }
 
         return topics;
     }
 
-    private static void LoadUnit(
+    private void LoadUnit(
         Func<IReadOnlyList<SourceLine>> readLines,
         Dictionary<string, HelpTopic> topics,
         Dictionary<string, (string File, int LineNumber)> topicSources,
         List<HelpTopic> orderedTopics,
-        ILogger logger,
         string unitFile,
         int unitLineNumber)
     {
         try
         {
             var lines = readLines();
-            ParseTopics(lines, topics, topicSources, orderedTopics, logger);
+            ParseTopics(lines, topics, topicSources, orderedTopics);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex,
-                "Hilfethemen aus Include in {File}:{LineNumber} konnten nicht geladen werden - übrige Themen bleiben verfügbar.",
+            logger.LogError(ex, HelpResources.Get("IncludeLoadError", language),
                 unitFile, unitLineNumber);
         }
     }
 
-    private static IReadOnlyList<SourceLine> ReadExpandedLines(
+    private IReadOnlyList<SourceLine> ReadExpandedLines(
         string filePath,
         string helpRoot,
         HashSet<string> includeChain)
@@ -140,7 +165,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         var fullPath = EnsureInsideHelpRoot(filePath, helpRoot);
         if (!includeChain.Add(fullPath))
         {
-            throw new FormatException($"Zirkuläres Hilfe-Include erkannt: {fullPath}");
+            throw new FormatException(HelpResources.Format("CyclicInclude", language, fullPath));
         }
 
         try
@@ -160,7 +185,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         }
     }
 
-    private static IEnumerable<SourceLine> ExpandLine(
+    private IEnumerable<SourceLine> ExpandLine(
         string line,
         string sourceFile,
         int lineNumber,
@@ -178,7 +203,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         return [new SourceLine(ResolveImagePaths(line, sourceFile, helpRoot), sourceFile, lineNumber)];
     }
 
-    private static string ResolveImagePaths(string line, string sourceFile, string helpRoot)
+    private string ResolveImagePaths(string line, string sourceFile, string helpRoot)
     {
         return ImagePattern.Replace(line, match =>
         {
@@ -193,30 +218,29 @@ public sealed class HelpContentProvider : IHelpContentProvider
         });
     }
 
-    private static string ResolveRelativePath(string sourceFile, string relativePath, string helpRoot)
+    private string ResolveRelativePath(string sourceFile, string relativePath, string helpRoot)
     {
         var sourceDirectory = Path.GetDirectoryName(sourceFile)!;
         return EnsureInsideHelpRoot(Path.Combine(sourceDirectory, relativePath.Trim()), helpRoot);
     }
 
-    private static string EnsureInsideHelpRoot(string path, string helpRoot)
+    private string EnsureInsideHelpRoot(string path, string helpRoot)
     {
         var fullPath = Path.GetFullPath(path);
         var relativePath = Path.GetRelativePath(Path.GetFullPath(helpRoot), fullPath);
         if (relativePath == ".." || relativePath.StartsWith($"..{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
         {
-            throw new InvalidOperationException($"Hilferessource liegt außerhalb des Help-Ordners: {path}");
+            throw new InvalidOperationException(HelpResources.Format("OutsideHelpRoot", language, path));
         }
 
         return fullPath;
     }
 
-    private static void ParseTopics(
+    private void ParseTopics(
         IReadOnlyList<SourceLine> lines,
         Dictionary<string, HelpTopic> topics,
         Dictionary<string, (string File, int LineNumber)> topicSources,
-        List<HelpTopic> orderedTopics,
-        ILogger logger)
+        List<HelpTopic> orderedTopics)
     {
         TopicBuilder? current = null;
 
@@ -224,7 +248,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         {
             if (line.Text.StartsWith("# ", StringComparison.Ordinal))
             {
-                AddTopic(topics, topicSources, orderedTopics, current, logger);
+                AddTopic(topics, topicSources, orderedTopics, current);
                 current = ParseTopicHeading(line);
             }
             else if (current is not null)
@@ -234,24 +258,24 @@ public sealed class HelpContentProvider : IHelpContentProvider
         }
     }
 
-    private static TopicBuilder ParseTopicHeading(SourceLine line)
+    private TopicBuilder ParseTopicHeading(SourceLine line)
     {
         var heading = line.Text[2..];
         var separatorIndex = heading.IndexOf('|');
         if (separatorIndex <= 0 || separatorIndex == heading.Length - 1)
         {
-            throw new FormatException($"Ungültige Hilfethema-Überschrift in {line.File}:{line.LineNumber}: '# {heading}'.");
+            throw new FormatException(
+                HelpResources.Format("InvalidHeading", language, line.File, line.LineNumber, heading));
         }
 
         return new TopicBuilder(heading[..separatorIndex].Trim(), heading[(separatorIndex + 1)..].Trim(), line.File, line.LineNumber);
     }
 
-    private static void AddTopic(
+    private void AddTopic(
         Dictionary<string, HelpTopic> topics,
         Dictionary<string, (string File, int LineNumber)> topicSources,
         List<HelpTopic> orderedTopics,
-        TopicBuilder? topic,
-        ILogger logger)
+        TopicBuilder? topic)
     {
         if (topic is null || topic.Id == "__end__")
         {
@@ -264,9 +288,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
         if (!topics.TryAdd(topic.Id, newTopic))
         {
             var existing = topicSources[topic.Id];
-            logger.LogWarning(
-                "Doppelte Hilfethema-ID '{TopicId}' in {File}:{LineNumber} - bereits definiert in {ExistingFile}:{ExistingLineNumber}. " +
-                "Die zuerst geladene Definition bleibt gültig.",
+            logger.LogWarning(HelpResources.Get("DuplicateTopic", language),
                 topic.Id, topic.File, topic.LineNumber, existing.File, existing.LineNumber);
             return;
         }

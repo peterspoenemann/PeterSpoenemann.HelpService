@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
+using PeterSpoenemann.HelpService.Resources;
 
 namespace PeterSpoenemann.HelpService.Behaviors;
 
@@ -16,12 +17,15 @@ public static class WebView2Html
 
     private static Task<CoreWebView2Environment>? environmentTask;
     private static string applicationName = "PeterSpoenemann.HelpService";
+    private static Func<string> getLanguage = () => HelpLanguageCodes.German;
 
     internal static void ConfigureApplicationName(string value)
     {
         applicationName = value;
         environmentTask = null;
     }
+
+    internal static void ConfigureLanguage(Func<string> languageAccessor) => getLanguage = languageAccessor;
 
     /// <summary>
     /// Bezeichnet die angefügte Eigenschaft mit dem vollständig gerenderten HTML-Inhalt.
@@ -145,7 +149,7 @@ public static class WebView2Html
         {
             webView.Visibility = Visibility.Collapsed;
             webView.SetValue(ErrorMessagePropertyKey,
-                $"Die HTML-Hilfe konnte nicht angezeigt werden. Prüfen Sie die Installation der Microsoft Edge WebView2 Runtime.\n\n{ex.Message}");
+                HelpResources.Format("WebViewError", getLanguage(), ex.Message));
         }
     }
 

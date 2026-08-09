@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ColorSchemeLabel" xml:space="preserve"><value>Farbschema:</value></data>
+  <data name="DarkTheme" xml:space="preserve"><value>Dunkel</value></data>
+  <data name="DefaultUser" xml:space="preserve"><value>Beispielbenutzer</value></data>
+  <data name="DisplayNameLabel" xml:space="preserve"><value>Anzeigename:</value></data>
+  <data name="EnglishLanguage" xml:space="preserve"><value>Englisch</value></data>
+  <data name="GeneratePreview" xml:space="preserve"><value>Vorschau erzeugen</value></data>
+  <data name="GermanLanguage" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="HelpButtonFormat" xml:space="preserve"><value>Hilfe zu „{0}“ (F1)</value></data>
+  <data name="HelpHint" xml:space="preserve"><value>Die Hilfe richtet sich nach der aktiven Registerkarte. F1 funktioniert ebenfalls.</value></data>
+  <data name="IncludeDetails" xml:space="preserve"><value>Details einschließen</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Sprache:</value></data>
+  <data name="LightTheme" xml:space="preserve"><value>Hell</value></data>
+  <data name="ProductTitle" xml:space="preserve"><value>PeterSpoenemann.HelpService – Sample</value></data>
+  <data name="ReportPlaceholder" xml:space="preserve"><value>Hier würde die erzeugte Auswertung angezeigt.</value></data>
+  <data name="ReportsHeading" xml:space="preserve"><value>Auswertung erstellen</value></data>
+  <data name="ReportsTab" xml:space="preserve"><value>Auswertung</value></data>
+  <data name="SettingsHeading" xml:space="preserve"><value>Allgemeine Einstellungen</value></data>
+  <data name="SettingsTab" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Ein kleiner Dialog mit kontextsensitiver Hilfe für zwei Registerkarten.</value></data>
+  <data name="SystemTheme" xml:space="preserve"><value>Systemeinstellung</value></data>
+  <data name="WindowTitle" xml:space="preserve"><value>HelpService-Beispiel</value></data>
+</root>
