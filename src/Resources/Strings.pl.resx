@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ApplicationNameMissing" xml:space="preserve"><value>Dla PeterSpoenemann.HelpService należy podać nazwę aplikacji.</value></data>
+  <data name="BackButton" xml:space="preserve"><value>← Wstecz</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Zamknij</value></data>
+  <data name="CyclicInclude" xml:space="preserve"><value>Wykryto cykliczne dołączenie pliku pomocy: {0}</value></data>
+  <data name="DuplicateTopic" xml:space="preserve"><value>Powielony identyfikator tematu pomocy „{TopicId}” w {File}:{LineNumber} – został już zdefiniowany w {ExistingFile}:{ExistingLineNumber}. Pierwsza wczytana definicja pozostaje aktywna.</value></data>
+  <data name="FallbackMarkdown" xml:space="preserve"><value>Dla tego obszaru nie ma jeszcze osobnego tematu pomocy.&#xA;&#xA;Naciśnij **F1** lub użyj przycisku pomocy na odpowiedniej stronie.</value></data>
+  <data name="FallbackTitle" xml:space="preserve"><value>Pomoc</value></data>
+  <data name="ForwardButton" xml:space="preserve"><value>Dalej →</value></data>
+  <data name="HelpTopics" xml:space="preserve"><value>Tematy pomocy</value></data>
+  <data name="HelpWindowTitle" xml:space="preserve"><value>Pomoc – {0}</value></data>
+  <data name="IncludeLoadError" xml:space="preserve"><value>Nie udało się wczytać tematów pomocy z pliku dołączonego w {File}:{LineNumber} – wszystkie pozostałe tematy są nadal dostępne.</value></data>
+  <data name="InvalidHeading" xml:space="preserve"><value>Nieprawidłowy nagłówek tematu pomocy w {0}:{1}: „# {2}”.</value></data>
+  <data name="LanguageRootMissing" xml:space="preserve"><value>Dla języka „{0}” należy podać główny plik pomocy.</value></data>
+  <data name="OutsideHelpRoot" xml:space="preserve"><value>Zasób pomocy znajduje się poza folderem Help: {0}</value></data>
+  <data name="RootReadError" xml:space="preserve"><value>Nie udało się odczytać głównego pliku pomocy: {HelpFile}</value></data>
+  <data name="SearchToolTip" xml:space="preserve"><value>Wyszukaj w tytułach i treści</value></data>
+  <data name="TopicsLoaded" xml:space="preserve"><value>Wczytano {TopicCount} tematów pomocy z pliku {HelpFile}.</value></data>
+  <data name="UnsupportedLanguage" xml:space="preserve"><value>Język „{0}” nie jest obsługiwany. Dozwolone wartości to „de”, „en” i „pl”.</value></data>
+  <data name="UnsupportedOrUnavailableLanguage" xml:space="preserve"><value>Język „{0}” nie jest obsługiwany lub nie skonfigurowano dla niego głównego pliku pomocy.</value></data>
+  <data name="WebViewError" xml:space="preserve"><value>Nie udało się wyświetlić pomocy HTML. Sprawdź, czy środowisko Microsoft Edge WebView2 Runtime jest zainstalowane.&#xA;&#xA;{0}</value></data>
+</root>

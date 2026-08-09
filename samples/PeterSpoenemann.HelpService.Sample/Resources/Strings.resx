@@ -16,6 +16,7 @@
   <data name="IncludeDetails" xml:space="preserve"><value>Details einschließen</value></data>
   <data name="LanguageLabel" xml:space="preserve"><value>Sprache:</value></data>
   <data name="LightTheme" xml:space="preserve"><value>Hell</value></data>
+  <data name="PolishLanguage" xml:space="preserve"><value>Polnisch</value></data>
   <data name="ProductTitle" xml:space="preserve"><value>PeterSpoenemann.HelpService – Sample</value></data>
   <data name="ReportPlaceholder" xml:space="preserve"><value>Hier würde die erzeugte Auswertung angezeigt.</value></data>
   <data name="ReportsHeading" xml:space="preserve"><value>Auswertung erstellen</value></data>

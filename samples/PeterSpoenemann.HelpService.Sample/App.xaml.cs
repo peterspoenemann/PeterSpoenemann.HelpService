@@ -19,6 +19,7 @@ public partial class App : Application
         {
             options.RootHelpFiles[HelpLanguageCodes.German] = Path.Combine("Help", "ContextHelp.de.md");
             options.RootHelpFiles[HelpLanguageCodes.English] = Path.Combine("Help", "ContextHelp.en.md");
+            options.RootHelpFiles[HelpLanguageCodes.Polish] = Path.Combine("Help", "ContextHelp.pl.md");
             options.Language = HelpLanguageCodes.German;
             options.ApplicationName = "PeterSpoenemann.HelpService.Sample";
         });

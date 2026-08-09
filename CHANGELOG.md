@@ -8,10 +8,10 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ### Added
 
-- Deutsche und englische Hilfethemen, Oberflächentexte und Meldungen.
+- Deutsche, englische und polnische Hilfethemen, Oberflächentexte und Meldungen.
 - Mehrere sprachgebundene Hilfe-Wurzeldateien über `HelpServiceOptions.RootHelpFiles`.
 - Laufzeit-Sprachwechsel über `IHelpLanguageService` mit `de` als Standard.
-- Zweisprachige Sample-Oberfläche mit Umschaltung zur Laufzeit.
+- Dreisprachige Sample-Oberfläche mit Umschaltung zur Laufzeit.
 
 ### Compatibility
 

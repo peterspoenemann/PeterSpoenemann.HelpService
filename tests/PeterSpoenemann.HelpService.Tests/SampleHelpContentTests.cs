@@ -40,4 +40,24 @@ public sealed class SampleHelpContentTests
         Assert.Contains("<html lang=\"en\">", html);
         Assert.Contains("data:image/svg+xml;base64,", html);
     }
+
+    [Fact]
+    public void PolishSampleHelpLoadsBothTranslatedTopics()
+    {
+        var rootFile = Path.Combine(AppContext.BaseDirectory, "SampleHelp", "ContextHelp.pl.md");
+        var provider = new HelpContentProvider(
+            rootFile,
+            HelpLanguageCodes.Polish,
+            NullLogger<HelpContentProvider>.Instance);
+
+        Assert.Equal(["settings", "reports"], provider.GetAllTopics().Select(topic => topic.Id));
+        Assert.Equal("Ustawienia", provider.GetTopic("settings").Title);
+        Assert.Contains("Obsługa klawiatury", provider.GetTopic("reports").Markdown);
+
+        var html = new MarkdownHelpDocumentBuilder().BuildHtml(
+            provider.GetTopic("settings").Markdown,
+            HelpLanguageCodes.Polish);
+        Assert.Contains("<html lang=\"pl\">", html);
+        Assert.Contains("data:image/svg+xml;base64,", html);
+    }
 }

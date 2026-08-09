@@ -21,7 +21,7 @@
   <data name="RootReadError" xml:space="preserve"><value>Help root file could not be read: {HelpFile}</value></data>
   <data name="SearchToolTip" xml:space="preserve"><value>Search titles and content</value></data>
   <data name="TopicsLoaded" xml:space="preserve"><value>Loaded {TopicCount} help topics from {HelpFile}.</value></data>
-  <data name="UnsupportedLanguage" xml:space="preserve"><value>Language '{0}' is not supported. Allowed values are 'de' and 'en'.</value></data>
+  <data name="UnsupportedLanguage" xml:space="preserve"><value>Language '{0}' is not supported. Allowed values are 'de', 'en', and 'pl'.</value></data>
   <data name="UnsupportedOrUnavailableLanguage" xml:space="preserve"><value>Language '{0}' is not supported or no help root file was configured for it.</value></data>
   <data name="WebViewError" xml:space="preserve"><value>The HTML help could not be displayed. Check that the Microsoft Edge WebView2 Runtime is installed.&#xA;&#xA;{0}</value></data>
 </root>

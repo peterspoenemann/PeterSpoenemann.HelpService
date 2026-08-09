@@ -37,7 +37,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
     /// Initialisiert einen Inhaltsanbieter für eine bestimmte Sprache.
     /// </summary>
     /// <param name="helpFilePath">Der vollständige oder relative Pfad zur Hilfe-Wurzeldatei.</param>
-    /// <param name="language">Der Sprachcode <c>de</c> oder <c>en</c>.</param>
+    /// <param name="language">Der Sprachcode <c>de</c>, <c>en</c> oder <c>pl</c>.</param>
     /// <param name="logger">Der Logger für Ladefehler, Warnungen und Statusinformationen.</param>
     /// <exception cref="ArgumentException">Der Sprachcode wird nicht unterstützt.</exception>
     public HelpContentProvider(

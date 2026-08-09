@@ -21,7 +21,7 @@
   <data name="RootReadError" xml:space="preserve"><value>Hilfe-Wurzeldatei konnte nicht gelesen werden: {HelpFile}</value></data>
   <data name="SearchToolTip" xml:space="preserve"><value>In Titeln und Inhalten suchen</value></data>
   <data name="TopicsLoaded" xml:space="preserve"><value>{TopicCount} Hilfethemen aus {HelpFile} geladen.</value></data>
-  <data name="UnsupportedLanguage" xml:space="preserve"><value>Die Sprache '{0}' wird nicht unterstützt. Zulässig sind 'de' und 'en'.</value></data>
+  <data name="UnsupportedLanguage" xml:space="preserve"><value>Die Sprache '{0}' wird nicht unterstützt. Zulässig sind 'de', 'en' und 'pl'.</value></data>
   <data name="UnsupportedOrUnavailableLanguage" xml:space="preserve"><value>Die Sprache '{0}' wird nicht unterstützt oder es wurde keine Hilfe-Wurzeldatei dafür konfiguriert.</value></data>
   <data name="WebViewError" xml:space="preserve"><value>Die HTML-Hilfe konnte nicht angezeigt werden. Prüfen Sie die Installation der Microsoft Edge WebView2 Runtime.&#xA;&#xA;{0}</value></data>
 </root>

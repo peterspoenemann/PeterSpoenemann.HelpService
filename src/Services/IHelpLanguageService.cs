@@ -23,7 +23,7 @@ public interface IHelpLanguageService
     /// <summary>
     /// Wechselt die aktive Sprache und aktualisiert geöffnete Hilfefenster.
     /// </summary>
-    /// <param name="language">Der Sprachcode <c>de</c> oder <c>en</c>.</param>
+    /// <param name="language">Der Sprachcode <c>de</c>, <c>en</c> oder <c>pl</c>.</param>
     /// <exception cref="ArgumentException">Die Sprache wird nicht unterstützt oder wurde nicht konfiguriert.</exception>
     void SetLanguage(string language);
 }

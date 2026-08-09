@@ -15,9 +15,14 @@ public static class HelpLanguageCodes
     /// </summary>
     public const string English = "en";
 
+    /// <summary>
+    /// Der Sprachcode für Polnisch.
+    /// </summary>
+    public const string Polish = "pl";
+
     internal static bool TryNormalize(string? language, out string normalized)
     {
         normalized = language?.Trim().ToLowerInvariant() ?? string.Empty;
-        return normalized is German or English;
+        return normalized is German or English or Polish;
     }
 }

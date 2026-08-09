@@ -85,13 +85,15 @@ public partial class MainWindow : Window
             LanguageLabel.Text = SampleResources.Get("LanguageLabel", language);
             GermanLanguageItem.Content = SampleResources.Get("GermanLanguage", language);
             EnglishLanguageItem.Content = SampleResources.Get("EnglishLanguage", language);
+            PolishLanguageItem.Content = SampleResources.Get("PolishLanguage", language);
             SettingsTab.Header = SampleResources.Get("SettingsTab", language);
             ReportsTab.Header = SampleResources.Get("ReportsTab", language);
             SettingsHeadingText.Text = SampleResources.Get("SettingsHeading", language);
             DisplayNameLabel.Text = SampleResources.Get("DisplayNameLabel", language);
             if (string.IsNullOrEmpty(DisplayNameTextBox.Text)
                 || DisplayNameTextBox.Text == SampleResources.Get("DefaultUser", HelpLanguageCodes.German)
-                || DisplayNameTextBox.Text == SampleResources.Get("DefaultUser", HelpLanguageCodes.English))
+                || DisplayNameTextBox.Text == SampleResources.Get("DefaultUser", HelpLanguageCodes.English)
+                || DisplayNameTextBox.Text == SampleResources.Get("DefaultUser", HelpLanguageCodes.Polish))
             {
                 DisplayNameTextBox.Text = SampleResources.Get("DefaultUser", language);
             }
@@ -103,9 +105,12 @@ public partial class MainWindow : Window
             IncludeDetailsCheckBox.Content = SampleResources.Get("IncludeDetails", language);
             GeneratePreviewButton.Content = SampleResources.Get("GeneratePreview", language);
             ReportPlaceholderText.Text = SampleResources.Get("ReportPlaceholder", language);
-            LanguageSelector.SelectedItem = language == HelpLanguageCodes.English
-                ? EnglishLanguageItem
-                : GermanLanguageItem;
+            LanguageSelector.SelectedItem = language switch
+            {
+                HelpLanguageCodes.English => EnglishLanguageItem,
+                HelpLanguageCodes.Polish => PolishLanguageItem,
+                _ => GermanLanguageItem
+            };
             UpdateHelpButton();
         }
         finally

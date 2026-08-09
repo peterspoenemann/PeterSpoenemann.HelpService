@@ -39,7 +39,7 @@ deutsche Hilfe. Deutsch (`de`) ist die Standardsprache.
 
 ### Mehrsprachige Hilfe
 
-Für Deutsch und Englisch werden mehrere Wurzeldateien nach Sprachcode registriert:
+Für Deutsch, Englisch und Polnisch werden mehrere Wurzeldateien nach Sprachcode registriert:
 
 ```csharp
 services.AddPeterSpoenemannHelpService(options =>
@@ -48,6 +48,8 @@ services.AddPeterSpoenemannHelpService(options =>
         Path.Combine("Help", "ContextHelp.de.md");
     options.RootHelpFiles[HelpLanguageCodes.English] =
         Path.Combine("Help", "ContextHelp.en.md");
+    options.RootHelpFiles[HelpLanguageCodes.Polish] =
+        Path.Combine("Help", "ContextHelp.pl.md");
     options.Language = HelpLanguageCodes.German;
     options.ApplicationName = "MeineAnwendung";
 });
@@ -60,6 +62,7 @@ Hilfefenster aktualisiert dabei Oberfläche, Inhaltsverzeichnis und aktives Hilf
 var languageService = serviceProvider.GetRequiredService<IHelpLanguageService>();
 
 languageService.SetLanguage(HelpLanguageCodes.English);
+languageService.SetLanguage(HelpLanguageCodes.Polish);
 languageService.SetLanguage(HelpLanguageCodes.German);
 ```
 
@@ -172,6 +175,7 @@ Include- und Bildpfade werden relativ zu der Markdown-Datei aufgelöst, in der s
 Help/
     ContextHelp.de.md   -- deutsche !include-Liste
     ContextHelp.en.md   -- englische !include-Liste
+    ContextHelp.pl.md   -- polnische !include-Liste
     Topics/
         Start.md
         Einstellungen.md
@@ -207,7 +211,7 @@ Unter [`samples/PeterSpoenemann.HelpService.Sample`](samples/PeterSpoenemann.Hel
 liegt eine kleine WPF-Anwendung mit zwei Registerkarten und kontextsensitiver Hilfe.
 Die aktive Hilfeseite wird über die Schaltfläche am unteren Fensterrand oder mit `F1` geöffnet.
 Über die Sprachauswahl kann die komplette Sample-Oberfläche einschließlich eines bereits
-geöffneten Hilfefensters zur Laufzeit zwischen Deutsch und Englisch wechseln.
+geöffneten Hilfefensters zur Laufzeit zwischen Deutsch, Englisch und Polnisch wechseln.
 
 ```powershell
 dotnet run --project samples/PeterSpoenemann.HelpService.Sample/PeterSpoenemann.HelpService.Sample.csproj

@@ -36,7 +36,7 @@ public sealed class MultilingualHelpServiceTests
     [Fact]
     public void RuntimeLanguageChangeUpdatesContentAndOpenViewModel()
     {
-        using var provider = CreateServices(includeEnglish: true);
+        using var provider = CreateServices(includeEnglish: true, includePolish: true);
         var languageService = provider.GetRequiredService<IHelpLanguageService>();
         var contentProvider = provider.GetRequiredService<IHelpContentProvider>();
         var documentBuilder = provider.GetRequiredService<IHelpDocumentBuilder>();
@@ -62,6 +62,17 @@ public sealed class MultilingualHelpServiceTests
         Assert.Contains("<html lang=\"en\">", viewModel.HtmlContent);
         Assert.Equal(HelpLanguageCodes.German, eventArgs?.OldLanguage);
         Assert.Equal(HelpLanguageCodes.English, eventArgs?.NewLanguage);
+
+        languageService.SetLanguage("PL");
+
+        Assert.Equal(HelpLanguageCodes.Polish, languageService.CurrentLanguage);
+        Assert.Equal("Ustawienia", contentProvider.GetTopic("settings").Title);
+        Assert.Equal("Ustawienia", viewModel.Title);
+        Assert.Equal("Tematy pomocy", viewModel.HelpTopicsText);
+        Assert.Equal("← Wstecz", viewModel.BackButtonText);
+        Assert.Contains("<html lang=\"pl\">", viewModel.HtmlContent);
+        Assert.Equal(HelpLanguageCodes.English, eventArgs?.OldLanguage);
+        Assert.Equal(HelpLanguageCodes.Polish, eventArgs?.NewLanguage);
     }
 
     [Fact]
@@ -79,7 +90,7 @@ public sealed class MultilingualHelpServiceTests
         Assert.Contains("No dedicated help topic", topic.Markdown);
     }
 
-    private static ServiceProvider CreateServices(bool includeEnglish)
+    private static ServiceProvider CreateServices(bool includeEnglish, bool includePolish = false)
     {
         var services = new ServiceCollection();
         services.AddSingleton<ILogger<HelpContentProvider>>(NullLogger<HelpContentProvider>.Instance);
@@ -90,6 +101,11 @@ public sealed class MultilingualHelpServiceTests
             {
                 options.RootHelpFiles[HelpLanguageCodes.English] =
                     Path.Combine(AppContext.BaseDirectory, "SampleHelp", "ContextHelp.en.md");
+            }
+            if (includePolish)
+            {
+                options.RootHelpFiles[HelpLanguageCodes.Polish] =
+                    Path.Combine(AppContext.BaseDirectory, "SampleHelp", "ContextHelp.pl.md");
             }
         });
         return services.BuildServiceProvider();

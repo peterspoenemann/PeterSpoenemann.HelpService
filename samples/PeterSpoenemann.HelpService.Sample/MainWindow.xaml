@@ -36,6 +36,7 @@
                           SelectionChanged="LanguageSelector_SelectionChanged">
                     <ComboBoxItem x:Name="GermanLanguageItem" Tag="de" />
                     <ComboBoxItem x:Name="EnglishLanguageItem" Tag="en" />
+                    <ComboBoxItem x:Name="PolishLanguageItem" Tag="pl" />
                 </ComboBox>
             </StackPanel>
             <StackPanel>

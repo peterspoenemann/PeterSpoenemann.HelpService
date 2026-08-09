@@ -16,6 +16,7 @@
   <data name="IncludeDetails" xml:space="preserve"><value>Include details</value></data>
   <data name="LanguageLabel" xml:space="preserve"><value>Language:</value></data>
   <data name="LightTheme" xml:space="preserve"><value>Light</value></data>
+  <data name="PolishLanguage" xml:space="preserve"><value>Polish</value></data>
   <data name="ProductTitle" xml:space="preserve"><value>PeterSpoenemann.HelpService – Sample</value></data>
   <data name="ReportPlaceholder" xml:space="preserve"><value>The generated report would be displayed here.</value></data>
   <data name="ReportsHeading" xml:space="preserve"><value>Create report</value></data>

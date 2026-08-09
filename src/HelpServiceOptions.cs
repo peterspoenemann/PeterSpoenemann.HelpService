@@ -34,7 +34,7 @@ public sealed class HelpServiceOptions
     }
 
     /// <summary>
-    /// Ruft die Hilfe-Wurzeldateien nach Sprachcode ab. Unterstützt werden <c>de</c> und <c>en</c>.
+    /// Ruft die Hilfe-Wurzeldateien nach Sprachcode ab. Unterstützt werden <c>de</c>, <c>en</c> und <c>pl</c>.
     /// Relative Pfade werden gegen das Ausgabeverzeichnis der Anwendung aufgelöst.
     /// </summary>
     public IDictionary<string, string> RootHelpFiles { get; } =

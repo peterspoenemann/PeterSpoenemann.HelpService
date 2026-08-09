@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ColorSchemeLabel" xml:space="preserve"><value>Schemat kolorów:</value></data>
+  <data name="DarkTheme" xml:space="preserve"><value>Ciemny</value></data>
+  <data name="DefaultUser" xml:space="preserve"><value>Przykładowy użytkownik</value></data>
+  <data name="DisplayNameLabel" xml:space="preserve"><value>Nazwa wyświetlana:</value></data>
+  <data name="EnglishLanguage" xml:space="preserve"><value>Angielski</value></data>
+  <data name="GeneratePreview" xml:space="preserve"><value>Utwórz podgląd</value></data>
+  <data name="GermanLanguage" xml:space="preserve"><value>Niemiecki</value></data>
+  <data name="HelpButtonFormat" xml:space="preserve"><value>Pomoc dla „{0}” (F1)</value></data>
+  <data name="HelpHint" xml:space="preserve"><value>Pomoc jest dopasowana do aktywnej karty. Możesz również nacisnąć F1.</value></data>
+  <data name="IncludeDetails" xml:space="preserve"><value>Uwzględnij szczegóły</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Język:</value></data>
+  <data name="LightTheme" xml:space="preserve"><value>Jasny</value></data>
+  <data name="PolishLanguage" xml:space="preserve"><value>Polski</value></data>
+  <data name="ProductTitle" xml:space="preserve"><value>PeterSpoenemann.HelpService – przykład</value></data>
+  <data name="ReportPlaceholder" xml:space="preserve"><value>W tym miejscu zostałby wyświetlony utworzony raport.</value></data>
+  <data name="ReportsHeading" xml:space="preserve"><value>Tworzenie raportu</value></data>
+  <data name="ReportsTab" xml:space="preserve"><value>Raport</value></data>
+  <data name="SettingsHeading" xml:space="preserve"><value>Ustawienia ogólne</value></data>
+  <data name="SettingsTab" xml:space="preserve"><value>Ustawienia</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Proste okno z pomocą kontekstową dla dwóch kart.</value></data>
+  <data name="SystemTheme" xml:space="preserve"><value>Ustawienie systemowe</value></data>
+  <data name="WindowTitle" xml:space="preserve"><value>Przykład HelpService</value></data>
+</root>
