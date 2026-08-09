@@ -6,6 +6,8 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-09
+
 ### Added
 
 - Plattformneutrales Assembly und NuGet-Paket `PeterSpoenemann.HelpService.Core` zum Laden von
