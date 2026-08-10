@@ -2,7 +2,7 @@
   "name": "peterspoenemann-helpservice-preview",
   "displayName": "PeterSpoenemann HelpService Preview",
   "description": "Vorschau für HelpService-Markdown mit !include und Markdig Advanced Extensions.",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "publisher": "peterspoenemann",
   "license": "MIT",
   "repository": {

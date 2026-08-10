@@ -6,6 +6,22 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-08-10
+
+### Added
+
+- VS-Code-Extension zur originalgetreuen Vorschau der Hilfedateien mit `!include`,
+  Themenüberschriften, relativen Bildern und Markdig Advanced Extensions.
+- Automatische Erkennung der zugehörigen `ContextHelp*.md`-Wurzeldatei sowie Navigation
+  zwischen den enthaltenen Hilfethemen.
+- Reproduzierbarer VSIX-Build über `vscode-extension/Build.cmd` und eine festgeschriebene
+  npm-Lockdatei.
+
+### Changed
+
+- Der tagbasierte Veröffentlichungsworkflow erzeugt neben den NuGet-Paketen ein GitHub Release
+  und stellt die VS-Code-Extension dort unter einem stabilen Downloadnamen bereit.
+
 ## [0.3.0] - 2026-08-09
 
 ### Added
