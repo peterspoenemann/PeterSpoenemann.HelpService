@@ -57,6 +57,27 @@ var html = renderer.BuildHtml(topic.Markdown, HelpLanguageCodes.English);
 daraus Navigation und Suche aufbauen und `html` direkt in ihrer Inhaltsansicht ausgeben. Für Anwendungen
 mit Logging steht zusätzlich der bisherige Konstruktor mit `ILogger<HelpContentProvider>` zur Verfügung.
 
+### HTML-Theme auswählen
+
+`MarkdownHelpDocumentBuilder` bettet Basis und Theme vollständig in das erzeugte HTML ein. Neben dem
+bisherigen hellen Standard stehen ein dunkles und ein systemabhängiges Theme zur Verfügung:
+
+```csharp
+var light = new MarkdownHelpDocumentBuilder();
+var dark = new MarkdownHelpDocumentBuilder(HelpDocumentTheme.Dark);
+var system = new MarkdownHelpDocumentBuilder(HelpDocumentTheme.System);
+```
+
+Zusätzliche CSS-Regeln werden nach dem Theme eingebettet und können dessen CSS-Variablen oder Regeln
+überschreiben:
+
+```csharp
+var customCss = File.ReadAllText("Help/my-theme.css");
+var custom = new MarkdownHelpDocumentBuilder(HelpDocumentTheme.Dark, customCss);
+```
+
+Das HTML benötigt dadurch auch mit eigenem Theme keine externe CSS-Datei zur Laufzeit.
+
 ## Einbindung
 
 Das WPF-Anwendungsprojekt referenziert `PeterSpoenemann.HelpService` und registriert die
@@ -67,11 +88,48 @@ services.AddPeterSpoenemannHelpService(options =>
 {
     options.RootHelpFile = Path.Combine("Help", "ContextHelp.de.md");
     options.ApplicationName = "MeineAnwendung";
+    options.Theme = HelpDocumentTheme.System;
+    options.AdditionalStyleSheetPath = Path.Combine("Help", "my-theme.css");
 });
 ```
 
 Die bisherige Eigenschaft `RootHelpFile` bleibt vollständig unterstützt und konfiguriert die
 deutsche Hilfe. Deutsch (`de`) ist die Standardsprache.
+
+`Theme` unterstützt `Light`, `Dark` und `System`; ohne Konfiguration bleibt die bisherige helle
+Darstellung erhalten. `AdditionalStyleSheetPath` ist optional und wird bei relativen Pfaden gegen
+`AppContext.BaseDirectory` aufgelöst. Die CSS-Datei muss daher wie die Markdown-Hilfe in die Ausgabe
+der Anwendung kopiert werden. Ihre Regeln werden direkt in das vom Core erzeugte HTML eingebettet.
+
+Das Theme kann außerdem zur Laufzeit umgeschaltet werden. Ein bereits geöffnetes Hilfefenster wird
+dabei automatisch neu gerendert:
+
+```csharp
+var themeService = serviceProvider.GetRequiredService<IHelpThemeService>();
+themeService.SetTheme(HelpDocumentTheme.Dark);
+```
+
+Das Sample verbindet diese API mit der Auswahl „System“, „Hell“ und „Dunkel“ auf der Registerkarte
+„Einstellungen“.
+
+### Vollständige HTML-Hilfeseite erzeugen
+
+Über `IHelpPageBuilder` kann der Core alle geladenen Themen zu einer eigenständigen HTML-Seite
+zusammenfassen. Sie enthält ein gruppiertes Inhaltsverzeichnis und einen Abschnitt pro Thema:
+
+```csharp
+var html = pageBuilder.BuildPageHtml(
+    contentProvider.GetAllTopics(),
+    languageService.CurrentLanguage,
+    "Hilfe zu meiner Anwendung");
+
+File.WriteAllText("help.html", html);
+```
+
+Links wie `[Auswertung](topic:reports)` werden dabei in interne Sprungmarken umgewandelt. Auch
+Verweise auf Überschriften wie `topic:reports#details` und lokale Links wie `#details` bleiben
+funktionsfähig. Sämtliche Styles und lokalen Bilder sind in der HTML-Datei eingebettet. Das Sample
+demonstriert den Export über die Schaltfläche „HTML anzeigen“.
 
 ### Mehrsprachige Hilfe
 

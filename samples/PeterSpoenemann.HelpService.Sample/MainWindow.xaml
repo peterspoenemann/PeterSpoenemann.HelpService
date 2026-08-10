@@ -16,15 +16,28 @@
                 BorderBrush="#B9CCE0"
                 BorderThickness="1"
                 CornerRadius="4">
-            <DockPanel>
-                <TextBlock x:Name="HelpHintText" VerticalAlignment="Center" />
-                <Button x:Name="HelpButton"
-                        DockPanel.Dock="Right"
-                        MinWidth="190"
-                        Margin="16,0,0,0"
-                        Padding="12,7"
-                        Click="HelpButton_Click" />
-            </DockPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="HelpHintText"
+                           VerticalAlignment="Center"
+                           TextWrapping="Wrap" />
+                <StackPanel Grid.Column="1"
+                            Margin="16,0,0,0"
+                            Orientation="Horizontal">
+                    <Button x:Name="ShowHtmlButton"
+                            MinWidth="120"
+                            Padding="12,7"
+                            Click="ShowHtmlButton_Click" />
+                    <Button x:Name="HelpButton"
+                            MinWidth="190"
+                            Margin="8,0,0,0"
+                            Padding="12,7"
+                            Click="HelpButton_Click" />
+                </StackPanel>
+            </Grid>
         </Border>
 
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
@@ -71,10 +84,15 @@
                     <TextBlock x:Name="DisplayNameLabel" Grid.Row="1" Margin="0,0,14,12" VerticalAlignment="Center" />
                     <TextBox x:Name="DisplayNameTextBox" Grid.Row="1" Grid.Column="1" Margin="0,0,0,12" Padding="7" />
                     <TextBlock x:Name="ColorSchemeLabel" Grid.Row="2" Margin="0,0,14,0" VerticalAlignment="Center" />
-                    <ComboBox Grid.Row="2" Grid.Column="1" Padding="7" SelectedIndex="0">
-                        <ComboBoxItem x:Name="SystemThemeItem" />
-                        <ComboBoxItem x:Name="LightThemeItem" />
-                        <ComboBoxItem x:Name="DarkThemeItem" />
+                    <ComboBox x:Name="HelpThemeSelector"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              Padding="7"
+                              SelectedIndex="0"
+                              SelectionChanged="HelpThemeSelector_SelectionChanged">
+                        <ComboBoxItem x:Name="SystemThemeItem" Tag="System" />
+                        <ComboBoxItem x:Name="LightThemeItem" Tag="Light" />
+                        <ComboBoxItem x:Name="DarkThemeItem" Tag="Dark" />
                     </ComboBox>
                 </Grid>
             </TabItem>

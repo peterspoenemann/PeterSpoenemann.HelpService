@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,15 +12,33 @@ namespace PeterSpoenemann.HelpService.Sample;
 public partial class MainWindow : Window
 {
     private readonly IContextHelpService helpService;
+    private readonly IHelpContentProvider contentProvider;
+    private readonly IHelpPageBuilder pageBuilder;
+    private readonly IHelpThemeService themeService;
+    private readonly HashSet<string> temporaryHtmlFiles = new(StringComparer.OrdinalIgnoreCase);
     private IHelpLanguageService? languageService;
     private bool isApplyingLanguage;
 
-    public MainWindow(IContextHelpService helpService, IHelpLanguageService languageService)
+    public MainWindow(
+        IContextHelpService helpService,
+        IHelpLanguageService languageService,
+        IHelpThemeService themeService,
+        IHelpContentProvider contentProvider,
+        IHelpPageBuilder pageBuilder)
     {
-        InitializeComponent();
         this.helpService = helpService;
         this.languageService = languageService;
+        this.themeService = themeService;
+        this.contentProvider = contentProvider;
+        this.pageBuilder = pageBuilder;
+        InitializeComponent();
         languageService.LanguageChanged += LanguageService_LanguageChanged;
+        HelpThemeSelector.SelectedItem = themeService.CurrentTheme switch
+        {
+            HelpDocumentTheme.Dark => DarkThemeItem,
+            HelpDocumentTheme.Light => LightThemeItem,
+            _ => SystemThemeItem,
+        };
         ApplyLanguage(languageService.CurrentLanguage);
     }
 
@@ -25,6 +46,22 @@ public partial class MainWindow : Window
         SampleTabs.SelectedItem is TabItem { Tag: string topicId } ? topicId : "settings";
 
     private void HelpButton_Click(object sender, RoutedEventArgs e) => ShowCurrentHelp();
+
+    private void ShowHtmlButton_Click(object sender, RoutedEventArgs e)
+    {
+        var language = languageService?.CurrentLanguage ?? HelpLanguageCodes.German;
+        var html = pageBuilder.BuildPageHtml(contentProvider.GetAllTopics(), language, Title);
+        var htmlPath = Path.Combine(
+            Path.GetTempPath(),
+            $"PeterSpoenemann.HelpService-{Guid.NewGuid():N}.html");
+        File.WriteAllText(htmlPath, html, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        temporaryHtmlFiles.Add(htmlPath);
+
+        Process.Start(new ProcessStartInfo(htmlPath)
+        {
+            UseShellExecute = true,
+        })?.Dispose();
+    }
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
@@ -60,6 +97,15 @@ public partial class MainWindow : Window
     private void LanguageService_LanguageChanged(object? sender, HelpLanguageChangedEventArgs e) =>
         ApplyLanguage(e.NewLanguage);
 
+    private void HelpThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (HelpThemeSelector.SelectedItem is ComboBoxItem { Tag: string themeName }
+            && Enum.TryParse<HelpDocumentTheme>(themeName, out var theme))
+        {
+            themeService.SetTheme(theme);
+        }
+    }
+
     private void ShowCurrentHelp() => helpService.ShowHelp(CurrentTopicId, this);
 
     private void UpdateHelpButton()
@@ -80,6 +126,7 @@ public partial class MainWindow : Window
         {
             Title = SampleResources.Get("WindowTitle", language);
             HelpHintText.Text = SampleResources.Get("HelpHint", language);
+            ShowHtmlButton.Content = SampleResources.Get("ShowHtml", language);
             ProductTitleText.Text = SampleResources.Get("ProductTitle", language);
             SubtitleText.Text = SampleResources.Get("Subtitle", language);
             LanguageLabel.Text = SampleResources.Get("LanguageLabel", language);
@@ -124,6 +171,22 @@ public partial class MainWindow : Window
         if (languageService is not null)
         {
             languageService.LanguageChanged -= LanguageService_LanguageChanged;
+        }
+
+        foreach (var htmlFile in temporaryHtmlFiles)
+        {
+            try
+            {
+                File.Delete(htmlFile);
+            }
+            catch (IOException)
+            {
+                // Der Browser kann die temporäre Datei beim Beenden noch geöffnet halten.
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Eine temporäre Vorschau darf das Schließen des Samples nicht verhindern.
+            }
         }
 
         base.OnClosed(e);

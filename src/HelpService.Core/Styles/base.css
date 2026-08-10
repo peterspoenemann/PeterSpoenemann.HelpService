@@ -1,0 +1,106 @@
+:root {
+  font-family: "Segoe UI", sans-serif;
+  color: var(--help-foreground);
+  background: var(--help-background);
+}
+
+body {
+  margin: 0;
+  padding: 4px 22px 28px 4px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+h1, h2, h3 {
+  color: var(--help-heading);
+  line-height: 1.25;
+}
+
+h2 {
+  margin: 1.4em 0 .45em;
+  padding-bottom: .25em;
+  font-size: 1.35rem;
+  border-bottom: 1px solid var(--help-border-subtle);
+}
+
+h3 {
+  margin: 1.2em 0 .35em;
+  font-size: 1.1rem;
+}
+
+p { margin: 0 0 .8em; }
+ul, ol { padding-left: 1.6em; }
+li { margin: .2em 0; }
+
+table {
+  width: 100%;
+  margin: .8em 0 1.2em;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 7px 9px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--help-border);
+}
+
+th {
+  color: var(--help-heading);
+  background: var(--help-table-heading);
+}
+
+tr:nth-child(even) td { background: var(--help-table-alternate); }
+
+code {
+  padding: .12em .3em;
+  background: var(--help-code-background);
+  border-radius: 3px;
+}
+
+a { color: var(--help-link); }
+img { max-width: 100%; height: auto; }
+
+blockquote {
+  margin: .8em 0 1em;
+  padding: 8px 14px;
+  color: var(--help-muted);
+  background: var(--help-quote-background);
+  border-left: 4px solid var(--help-quote-border);
+}
+
+.markdown-alert {
+  margin: .8em 0 1em;
+  padding: 11px 13px;
+  border: 1px solid;
+  border-left-width: 5px;
+  border-radius: 4px;
+}
+
+.markdown-alert > :last-child { margin-bottom: 0; }
+.markdown-alert-title { margin-bottom: .35em; font-weight: 700; }
+
+.markdown-alert-tip,
+.markdown-alert-note {
+  background: var(--help-info-background);
+  border-color: var(--help-info-border);
+}
+
+.markdown-alert-warning,
+.markdown-alert-important,
+.markdown-alert-caution {
+  background: var(--help-warning-background);
+  border-color: var(--help-warning-border);
+}
+
+.task-list-item { list-style: none; }
+
+.footnotes {
+  margin-top: 1.5em;
+  font-size: .92em;
+  border-top: 1px solid var(--help-border-subtle);
+}
+
+@media print {
+  body { padding: 0; }
+}

@@ -70,6 +70,8 @@ public static class HelpServiceConfiguration
         }
 
         var languageService = new HelpLanguageService(rootHelpFiles.Keys, initialLanguage);
+        var additionalCss = LoadAdditionalStyleSheet(options.AdditionalStyleSheetPath);
+        var documentBuilder = new MarkdownHelpDocumentBuilder(options.Theme, additionalCss);
         WebView2Html.ConfigureApplicationName(options.ApplicationName);
         WebView2Html.ConfigureLanguage(() => languageService.CurrentLanguage);
         return services
@@ -84,7 +86,23 @@ public static class HelpServiceConfiguration
                     StringComparer.OrdinalIgnoreCase);
                 return new MultilingualHelpContentProvider(providers, languageService);
             })
-            .AddSingleton<IHelpDocumentBuilder, MarkdownHelpDocumentBuilder>()
+            .AddSingleton(documentBuilder)
+            .AddSingleton<IHelpDocumentBuilder>(documentBuilder)
+            .AddSingleton<IHelpPageBuilder>(documentBuilder)
+            .AddSingleton<IHelpThemeService>(documentBuilder)
             .AddSingleton<IContextHelpService, ContextHelpService>();
+    }
+
+    private static string? LoadAdditionalStyleSheet(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return null;
+        }
+
+        var fullPath = Path.IsPathFullyQualified(path)
+            ? path
+            : Path.Combine(AppContext.BaseDirectory, path);
+        return File.ReadAllText(fullPath);
     }
 }

@@ -40,6 +40,7 @@ public sealed partial class ContextHelpDialogViewModel : ObservableObject, IDisp
     private readonly IHelpContentProvider contentProvider;
     private readonly IHelpDocumentBuilder documentBuilder;
     private readonly IHelpLanguageService languageService;
+    private readonly IHelpThemeService? themeService;
     private IReadOnlyList<HelpTopic> allTopics;
     private readonly Dictionary<string, bool> expandedGroups = new(StringComparer.OrdinalIgnoreCase);
     private readonly Stack<string> backHistory = new();
@@ -98,9 +99,14 @@ public sealed partial class ContextHelpDialogViewModel : ObservableObject, IDisp
         this.contentProvider = contentProvider;
         this.documentBuilder = documentBuilder;
         this.languageService = languageService;
+        themeService = documentBuilder as IHelpThemeService;
         allTopics = contentProvider.GetAllTopics();
         currentTopicId = initialTopicId;
         languageService.LanguageChanged += OnLanguageChanged;
+        if (themeService is not null)
+        {
+            themeService.ThemeChanged += OnThemeChanged;
+        }
 
         ShowTopic(initialTopicId, addToHistory: false);
     }
@@ -134,6 +140,11 @@ public sealed partial class ContextHelpDialogViewModel : ObservableObject, IDisp
     /// Ruft den lokalisierten Hinweistext für das Suchfeld ab.
     /// </summary>
     public string SearchToolTip => HelpResources.Get("SearchToolTip", languageService.CurrentLanguage);
+
+    /// <summary>
+    /// Ruft das aktuell für die Hilfe verwendete Theme ab.
+    /// </summary>
+    public HelpDocumentTheme CurrentTheme => themeService?.CurrentTheme ?? HelpDocumentTheme.Light;
 
     /// <summary>
     /// Ruft die anhand des Suchtexts gefilterten und gruppierten Themen ab.
@@ -237,7 +248,29 @@ public sealed partial class ContextHelpDialogViewModel : ObservableObject, IDisp
     /// <summary>
     /// Hebt die Anmeldung am Sprachdienst auf.
     /// </summary>
-    public void Dispose() => languageService.LanguageChanged -= OnLanguageChanged;
+    public void Dispose()
+    {
+        languageService.LanguageChanged -= OnLanguageChanged;
+        if (themeService is not null)
+        {
+            themeService.ThemeChanged -= OnThemeChanged;
+        }
+    }
+
+    private void OnThemeChanged(object? sender, HelpThemeChangedEventArgs e)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is not null && !dispatcher.CheckAccess())
+        {
+            dispatcher.Invoke(RefreshTheme);
+            return;
+        }
+
+        OnPropertyChanged(nameof(CurrentTheme));
+        RefreshTheme();
+    }
+
+    private void RefreshTheme() => ShowTopic(currentTopicId, addToHistory: false, forceRefresh: true);
 
     private void OnLanguageChanged(object? sender, HelpLanguageChangedEventArgs e)
     {

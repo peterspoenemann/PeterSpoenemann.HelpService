@@ -26,4 +26,5 @@
   <data name="Subtitle" xml:space="preserve"><value>Proste okno z pomocą kontekstową dla dwóch kart.</value></data>
   <data name="SystemTheme" xml:space="preserve"><value>Ustawienie systemowe</value></data>
   <data name="WindowTitle" xml:space="preserve"><value>Przykład HelpService</value></data>
+  <data name="ShowHtml" xml:space="preserve"><value>Pokaż HTML</value></data>
 </root>

@@ -90,6 +90,42 @@ public sealed class MultilingualHelpServiceTests
         Assert.Contains("No dedicated help topic", topic.Markdown);
     }
 
+    [Fact]
+    public void ConfigurationLoadsAdditionalStyleSheetIntoSelectedTheme()
+    {
+        var styleSheetPath = Path.GetTempFileName();
+        try
+        {
+            File.WriteAllText(styleSheetPath, ".custom-help { letter-spacing: 1px; }");
+            var services = new ServiceCollection();
+            services.AddSingleton<ILogger<HelpContentProvider>>(NullLogger<HelpContentProvider>.Instance);
+            services.AddPeterSpoenemannHelpService(options =>
+            {
+                options.RootHelpFile = Path.Combine(AppContext.BaseDirectory, "SampleHelp", "ContextHelp.de.md");
+                options.Theme = HelpDocumentTheme.Dark;
+                options.AdditionalStyleSheetPath = styleSheetPath;
+            });
+            using var provider = services.BuildServiceProvider();
+
+            var documentBuilder = provider.GetRequiredService<IHelpDocumentBuilder>();
+            var pageBuilder = provider.GetRequiredService<IHelpPageBuilder>();
+            var themeService = provider.GetRequiredService<IHelpThemeService>();
+            var html = documentBuilder.BuildHtml("Text");
+
+            Assert.Contains("content=\"dark\"", html);
+            Assert.Contains(".custom-help { letter-spacing: 1px; }", html);
+            Assert.Same(documentBuilder, themeService);
+            Assert.Same(documentBuilder, pageBuilder);
+
+            themeService.SetTheme(HelpDocumentTheme.Light);
+            Assert.Contains("content=\"light\"", documentBuilder.BuildHtml("Text"));
+        }
+        finally
+        {
+            File.Delete(styleSheetPath);
+        }
+    }
+
     private static ServiceProvider CreateServices(bool includeEnglish, bool includePolish = false)
     {
         var services = new ServiceCollection();

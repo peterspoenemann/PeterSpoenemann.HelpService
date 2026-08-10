@@ -26,4 +26,5 @@
   <data name="Subtitle" xml:space="preserve"><value>A small dialog with context-sensitive help for two tabs.</value></data>
   <data name="SystemTheme" xml:space="preserve"><value>System setting</value></data>
   <data name="WindowTitle" xml:space="preserve"><value>HelpService Sample</value></data>
+  <data name="ShowHtml" xml:space="preserve"><value>Show HTML</value></data>
 </root>

@@ -1,0 +1,19 @@
+:root {
+  color-scheme: dark;
+  --help-foreground: #d6dbe3;
+  --help-background: #1e2228;
+  --help-heading: #82b9ed;
+  --help-link: #69b7f5;
+  --help-muted: #b7c0cc;
+  --help-border: #56616e;
+  --help-border-subtle: #3b444f;
+  --help-quote-border: #56616e;
+  --help-table-heading: #293d50;
+  --help-table-alternate: #252b33;
+  --help-code-background: #2b323b;
+  --help-quote-background: #252b33;
+  --help-info-background: #3a341f;
+  --help-info-border: #cda844;
+  --help-warning-background: #472927;
+  --help-warning-border: #df7465;
+}

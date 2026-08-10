@@ -8,6 +8,8 @@
         Height="720"
         MinWidth="800"
         MinHeight="480"
+        Background="{DynamicResource HelpWindowBackground}"
+        Foreground="{DynamicResource HelpForeground}"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -20,18 +22,27 @@
                         Content="{Binding BackButtonText}"
                         MinWidth="90"
                         Padding="10,5"
-                        Margin="0,0,6,0" />
+                        Margin="0,0,6,0"
+                        Background="{DynamicResource HelpControlBackground}"
+                        BorderBrush="{DynamicResource HelpBorder}"
+                        Foreground="{DynamicResource HelpForeground}" />
                 <Button Command="{Binding GoForwardCommand}"
                         Content="{Binding ForwardButtonText}"
                         MinWidth="90"
-                        Padding="10,5" />
+                        Padding="10,5"
+                        Background="{DynamicResource HelpControlBackground}"
+                        BorderBrush="{DynamicResource HelpBorder}"
+                        Foreground="{DynamicResource HelpForeground}" />
             </StackPanel>
 
             <Button DockPanel.Dock="Right"
                     Click="CloseButton_Click"
                     Content="{Binding CloseButtonText}"
                     MinWidth="100"
-                    Padding="14,5" />
+                    Padding="14,5"
+                    Background="{DynamicResource HelpControlBackground}"
+                    BorderBrush="{DynamicResource HelpBorder}"
+                    Foreground="{DynamicResource HelpForeground}" />
         </DockPanel>
 
         <Grid>
@@ -46,11 +57,15 @@
                            Text="{Binding HelpTopicsText}"
                            FontSize="18"
                            FontWeight="SemiBold"
-                           Foreground="#174A7E"
+                           Foreground="{DynamicResource HelpHeading}"
                            Margin="4,0,0,8" />
                 <TextBox DockPanel.Dock="Top"
                          Margin="0,0,0,10"
                          Padding="7,6"
+                         Background="{DynamicResource HelpControlBackground}"
+                         BorderBrush="{DynamicResource HelpBorder}"
+                         Foreground="{DynamicResource HelpForeground}"
+                         CaretBrush="{DynamicResource HelpForeground}"
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="{Binding SearchToolTip}" />
 
@@ -72,7 +87,7 @@
                                             Cursor="Hand"
                                             FontWeight="SemiBold"
                                             FontSize="14"
-                                            Foreground="#6B7280" />
+                                            Foreground="{DynamicResource HelpMuted}" />
                                     <ItemsControl ItemsSource="{Binding Items}"
                                                   Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibility}}">
                                         <ItemsControl.ItemTemplate>
@@ -90,15 +105,15 @@
                                                         FontSize="11">
                                                     <Button.Style>
                                                         <Style TargetType="Button">
-                                                            <Setter Property="Foreground" Value="#1F2937" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource HelpForeground}" />
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                                    <Setter Property="Background" Value="#DCE6F1" />
+                                                                    <Setter Property="Background" Value="{DynamicResource HelpSelectedBackground}" />
                                                                     <Setter Property="FontWeight" Value="SemiBold" />
-                                                                    <Setter Property="Foreground" Value="#174A7E" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource HelpHeading}" />
                                                                 </DataTrigger>
                                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter Property="Background" Value="#EEF2F7" />
+                                                                    <Setter Property="Background" Value="{DynamicResource HelpHoverBackground}" />
                                                                 </Trigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -118,7 +133,7 @@
                           Width="6"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
-                          Background="#E5E7EB" />
+                          Background="{DynamicResource HelpBorderSubtle}" />
 
             <Grid Grid.Column="2" Margin="16,0,0,0">
                 <Grid.RowDefinitions>
@@ -128,7 +143,7 @@
                 <TextBlock Text="{Binding Title}"
                            FontSize="24"
                            FontWeight="SemiBold"
-                           Foreground="#174A7E"
+                           Foreground="{DynamicResource HelpHeading}"
                            Margin="4,0,4,10" />
                 <wv2:WebView2 x:Name="HelpBrowser"
                               Grid.Row="1"
@@ -136,7 +151,7 @@
                               help:WebView2Html.Content="{Binding HtmlContent}"
                               help:WebView2Html.TopicLinkCommand="{Binding SelectTopicCommand}" />
                 <Border Grid.Row="1"
-                        Background="White"
+                        Background="{DynamicResource HelpWindowBackground}"
                         Padding="24">
                     <Border.Style>
                         <Style TargetType="Border">
@@ -150,7 +165,7 @@
                     </Border.Style>
                     <TextBlock Text="{Binding ElementName=HelpBrowser, Path=(help:WebView2Html.ErrorMessage)}"
                                TextWrapping="Wrap"
-                               Foreground="Firebrick" />
+                               Foreground="{DynamicResource HelpErrorForeground}" />
                 </Border>
             </Grid>
         </Grid>

@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light dark;
+  --help-foreground: #1f2937;
+  --help-background: #ffffff;
+  --help-heading: #174a7e;
+  --help-link: #0b63a8;
+  --help-muted: #4b5563;
+  --help-border: #b4bec8;
+  --help-border-subtle: #dbe3ec;
+  --help-quote-border: #cbd5e1;
+  --help-table-heading: #e8f0f8;
+  --help-table-alternate: #f8fafc;
+  --help-code-background: #f1f5f9;
+  --help-quote-background: #f8fafc;
+  --help-info-background: #fff8e1;
+  --help-info-border: #e5b94e;
+  --help-warning-background: #fdecea;
+  --help-warning-border: #d35947;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --help-foreground: #d6dbe3;
+    --help-background: #1e2228;
+    --help-heading: #82b9ed;
+    --help-link: #69b7f5;
+    --help-muted: #b7c0cc;
+    --help-border: #56616e;
+    --help-border-subtle: #3b444f;
+    --help-quote-border: #56616e;
+    --help-table-heading: #293d50;
+    --help-table-alternate: #252b33;
+    --help-code-background: #2b323b;
+    --help-quote-background: #252b33;
+    --help-info-background: #3a341f;
+    --help-info-border: #cda844;
+    --help-warning-background: #472927;
+    --help-warning-border: #df7465;
+  }
+}

@@ -46,6 +46,19 @@ public sealed class HelpServiceOptions
     public string Language { get; set; } = HelpLanguageCodes.German;
 
     /// <summary>
+    /// Ruft das in die erzeugten HTML-Dokumente eingebettete Theme ab oder legt es fest.
+    /// Der Standardwert ist <see cref="HelpDocumentTheme.Light"/>.
+    /// </summary>
+    public HelpDocumentTheme Theme { get; set; } = HelpDocumentTheme.Light;
+
+    /// <summary>
+    /// Ruft den optionalen Pfad zu einer zusätzlichen CSS-Datei ab oder legt ihn fest.
+    /// Relative Pfade werden gegen das Ausgabeverzeichnis der Anwendung aufgelöst. Die Regeln werden
+    /// nach Basis und Theme in das HTML eingebettet und können beide überschreiben.
+    /// </summary>
+    public string? AdditionalStyleSheetPath { get; set; }
+
+    /// <summary>
     /// Unterordner unter <see cref="Environment.SpecialFolder.LocalApplicationData"/>
     /// für die WebView2-Benutzerdaten.
     /// </summary>

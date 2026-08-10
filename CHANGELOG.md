@@ -6,6 +6,22 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-10
+
+### Added
+
+- Der Core bettet wahlweise ein helles, dunkles oder systemabhängiges Theme direkt in jedes
+  erzeugte HTML-Dokument ein.
+- WPF-Anwendungen können über `HelpServiceOptions.AdditionalStyleSheetPath` eine zusätzliche
+  CSS-Datei einbetten und damit das gewählte Theme anpassen oder überschreiben.
+- Über `IHelpThemeService` lässt sich das HTML-Theme zur Laufzeit wechseln; das Sample demonstriert
+  die Auswahl zwischen System-, hellem und dunklem Theme.
+- Das gewählte Theme wird auch auf Navigation, Inhaltsverzeichnis und Bedienelemente des
+  WPF-Hilfedialogs angewendet.
+- Das Sample kann die vollständige HTML-Hilfeseite erzeugen und im Standardbrowser öffnen.
+- Der Core kann über `IHelpPageBuilder` eine eigenständige HTML-Hilfeseite mit gruppiertem
+  Inhaltsverzeichnis sowie internen Topic- und Abschnittsverweisen erzeugen.
+
 ## [0.5.0] - 2026-08-10
 
 ### Added

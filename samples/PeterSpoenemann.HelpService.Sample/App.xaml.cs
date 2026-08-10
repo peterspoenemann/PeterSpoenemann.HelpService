@@ -22,6 +22,7 @@ public partial class App : Application
             options.RootHelpFiles[HelpLanguageCodes.Polish] = Path.Combine("Help", "ContextHelp.pl.md");
             options.Language = HelpLanguageCodes.German;
             options.ApplicationName = "PeterSpoenemann.HelpService.Sample";
+            options.Theme = HelpDocumentTheme.System;
         });
         services.AddSingleton<MainWindow>();
 

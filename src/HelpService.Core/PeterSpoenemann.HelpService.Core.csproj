@@ -9,7 +9,7 @@
     <RootNamespace>PeterSpoenemann.HelpService</RootNamespace>
 
     <PackageId>PeterSpoenemann.HelpService.Core</PackageId>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Authors>Peter Spönemann</Authors>
     <Copyright>Copyright © 2026 Peter Spönemann</Copyright>
     <Description>Plattformneutraler Kern für Markdown-basierte Hilfe: Themen laden, Inhaltsverzeichnis bereitstellen und HTML erzeugen.</Description>
@@ -31,6 +31,10 @@
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="/" />
     <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Styles/*.css" />
   </ItemGroup>
 
   <ItemGroup>
