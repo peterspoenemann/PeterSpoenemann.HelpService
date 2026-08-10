@@ -46,5 +46,30 @@ public sealed class CoreApiTests : IDisposable
         Assert.DoesNotContain("WindowsBase", references);
     }
 
+    [Fact]
+    public void PreservesSourceLocationsAcrossNestedIncludes()
+    {
+        var topicsDirectory = Directory.CreateDirectory(Path.Combine(testDirectory, "Topics")).FullName;
+        var sharedDirectory = Directory.CreateDirectory(Path.Combine(testDirectory, "Shared")).FullName;
+        var rootFile = Path.Combine(testDirectory, "ContextHelp.de.md");
+        var topicFile = Path.Combine(topicsDirectory, "Start.md");
+        var sharedFile = Path.Combine(sharedDirectory, "Details.md");
+        File.WriteAllText(rootFile, "!include Topics/Start.md");
+        File.WriteAllText(topicFile, "# start | Start\n\n## Lokal\n\n!include ../Shared/Details.md");
+        File.WriteAllText(sharedFile, "Gemeinsamer Text.\n\nNoch ein Absatz.");
+
+        var provider = new HelpContentProvider(rootFile);
+        var sourceLines = provider.GetSourceLines("start");
+
+        Assert.Equal(provider.GetTopic("start").Markdown.Split(Environment.NewLine).Length, sourceLines.Count);
+        Assert.Contains(sourceLines, line =>
+            line.Text == "## Lokal" && line.FilePath == topicFile && line.LineNumber == 3);
+        Assert.Contains(sourceLines, line =>
+            line.Text == "Gemeinsamer Text." && line.FilePath == sharedFile && line.LineNumber == 1);
+        Assert.Contains(sourceLines, line =>
+            line.Text == "Noch ein Absatz." && line.FilePath == sharedFile && line.LineNumber == 3);
+        Assert.Empty(provider.GetSourceLines("missing"));
+    }
+
     public void Dispose() => Directory.Delete(testDirectory, recursive: true);
 }

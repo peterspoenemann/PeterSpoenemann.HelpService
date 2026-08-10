@@ -10,7 +10,7 @@ namespace PeterSpoenemann.HelpService.Services;
 /// <summary>
 /// Lädt Hilfethemen aus einer Markdown-Wurzeldatei und löst darin enthaltene Includes und Bildpfade auf.
 /// </summary>
-public sealed class HelpContentProvider : IHelpContentProvider
+public sealed class HelpContentProvider : IHelpContentProvider, IHelpSourceMapProvider
 {
     private static readonly Regex IncludePattern = new(
         @"^\s*!include\s+(?:<(?<angle>[^>]+)>|""(?<quote>[^""]+)""|(?<plain>\S+))\s*$",
@@ -21,6 +21,8 @@ public sealed class HelpContentProvider : IHelpContentProvider
 
     private readonly IReadOnlyDictionary<string, HelpTopic> _topics;
     private readonly IReadOnlyList<HelpTopic> _orderedTopics;
+    private readonly Dictionary<string, IReadOnlyList<HelpSourceLine>> sourceLinesByTopic =
+        new(StringComparer.OrdinalIgnoreCase);
     private readonly string language;
     private readonly ILogger<HelpContentProvider> logger;
 
@@ -98,6 +100,10 @@ public sealed class HelpContentProvider : IHelpContentProvider
     /// </summary>
     /// <returns>Eine schreibgeschützte Liste der Themen.</returns>
     public IReadOnlyList<HelpTopic> GetAllTopics() => _orderedTopics;
+
+    /// <inheritdoc />
+    public IReadOnlyList<HelpSourceLine> GetSourceLines(string topicId) =>
+        sourceLinesByTopic.TryGetValue(topicId, out var sourceLines) ? sourceLines : [];
 
     /// <summary>
     /// Lädt die Wurzeldatei fehlertolerant: Jede oberste <c>!include</c>-Zeile (und der restliche, nicht
@@ -274,7 +280,7 @@ public sealed class HelpContentProvider : IHelpContentProvider
             }
             else if (current is not null)
             {
-                current.Lines.Add(line.Text);
+                current.Lines.Add(line);
             }
         }
     }
@@ -303,9 +309,13 @@ public sealed class HelpContentProvider : IHelpContentProvider
             return;
         }
 
+        var contentLines = TrimBoundaryLines(topic.Lines);
         var groupName = string.IsNullOrEmpty(topic.File) ? string.Empty : Path.GetFileNameWithoutExtension(topic.File);
         var newTopic = new HelpTopic(
-            topic.Id, topic.Title, string.Join(Environment.NewLine, topic.Lines).Trim(), groupName);
+            topic.Id,
+            topic.Title,
+            string.Join(Environment.NewLine, contentLines.Select(line => line.Text)).Trim(),
+            groupName);
         if (!topics.TryAdd(topic.Id, newTopic))
         {
             var existing = topicSources[topic.Id];
@@ -315,7 +325,27 @@ public sealed class HelpContentProvider : IHelpContentProvider
         }
 
         topicSources[topic.Id] = (topic.File, topic.LineNumber);
+        sourceLinesByTopic[topic.Id] = contentLines
+            .Select(line => new HelpSourceLine(line.Text, line.File, line.LineNumber))
+            .ToArray();
         orderedTopics.Add(newTopic);
+    }
+
+    private static IReadOnlyList<SourceLine> TrimBoundaryLines(IReadOnlyList<SourceLine> lines)
+    {
+        var first = 0;
+        while (first < lines.Count && string.IsNullOrWhiteSpace(lines[first].Text))
+        {
+            first++;
+        }
+
+        var last = lines.Count - 1;
+        while (last >= first && string.IsNullOrWhiteSpace(lines[last].Text))
+        {
+            last--;
+        }
+
+        return first > last ? [] : lines.Skip(first).Take(last - first + 1).ToArray();
     }
 
     private readonly record struct SourceLine(string Text, string File, int LineNumber);
@@ -326,6 +356,6 @@ public sealed class HelpContentProvider : IHelpContentProvider
         public string Title { get; } = title;
         public string File { get; } = file;
         public int LineNumber { get; } = lineNumber;
-        public List<string> Lines { get; } = [];
+        public List<SourceLine> Lines { get; } = [];
     }
 }

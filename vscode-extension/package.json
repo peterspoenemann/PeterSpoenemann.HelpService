@@ -2,7 +2,7 @@
   "name": "peterspoenemann-helpservice-preview",
   "displayName": "PeterSpoenemann HelpService Preview",
   "description": "Vorschau für HelpService-Markdown mit !include und Markdig Advanced Extensions.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "peterspoenemann",
   "license": "MIT",
   "repository": {
@@ -34,6 +34,11 @@
         "command": "helpService.openPreview",
         "title": "HelpService: Vorschau öffnen",
         "icon": "$(open-preview)"
+      },
+      {
+        "command": "helpService.openSource",
+        "title": "Quelldatei öffnen",
+        "category": "HelpService"
       }
     ],
     "menus": {
@@ -48,6 +53,13 @@
         {
           "command": "helpService.openPreview",
           "when": "resourceExtname == .md",
+          "group": "navigation"
+        }
+      ],
+      "webview/context": [
+        {
+          "command": "helpService.openSource",
+          "when": "webviewId == 'helpServicePreview' && webviewSection == 'source'",
           "group": "navigation"
         }
       ]

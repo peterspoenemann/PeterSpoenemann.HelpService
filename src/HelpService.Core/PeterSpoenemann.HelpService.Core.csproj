@@ -9,7 +9,7 @@
     <RootNamespace>PeterSpoenemann.HelpService</RootNamespace>
 
     <PackageId>PeterSpoenemann.HelpService.Core</PackageId>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <Authors>Peter Spönemann</Authors>
     <Copyright>Copyright © 2026 Peter Spönemann</Copyright>
     <Description>Plattformneutraler Kern für Markdown-basierte Hilfe: Themen laden, Inhaltsverzeichnis bereitstellen und HTML erzeugen.</Description>

@@ -11,6 +11,8 @@ Unterstützt werden insbesondere:
 - Markdigs `UseAdvancedExtensions()`, darunter Tabellen, Fußnoten, Aufgabenlisten,
   Definitionslisten, Auto-Links, Überschriften-IDs und Markdown-Alerts
 - `topic:`-Links innerhalb der Vorschau
+- Herkunftsanzeige als Tooltip mit relativem Dateipfad und Originalzeile
+- natives Kontextmenü **Quelldatei öffnen**, auch für Inhalte aus verschachtelten Includes
 
 ## Verwendung
 
@@ -24,6 +26,11 @@ Include-Kette. Für gemeinsam eingebundene Dateien kann unter
 `helpService.preview.rootFile` eine feste Wurzel angegeben werden. Relative Pfade
 beziehen sich auf den Workspace. `helpService.preview.language` legt bei Bedarf die
 Sprache fest.
+
+Jeder gerenderte Markdown-Block zeigt beim Darüberfahren seine ursprüngliche Datei und
+Zeilennummer an. Über einen Rechtsklick und **HelpService: Quelldatei öffnen** wird die
+tatsächliche Markdown-Datei im ursprünglichen Editorbereich geöffnet und der Cursor an
+der entsprechenden Zeile positioniert. Bei `!include` ist dies die eingebundene Datei.
 
 Voraussetzung ist das .NET-10-Runtime-Paket beziehungsweise SDK.
 

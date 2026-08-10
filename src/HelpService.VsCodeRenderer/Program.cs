@@ -1,7 +1,13 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Markdig;
+using Markdig.Renderers;
+using Markdig.Renderers.Html;
+using Markdig.Syntax;
 using Microsoft.Extensions.Logging;
 using PeterSpoenemann.HelpService;
+using PeterSpoenemann.HelpService.Models;
 using PeterSpoenemann.HelpService.Services;
 
 return await PreviewRenderer.RunAsync(args);
@@ -9,6 +15,10 @@ return await PreviewRenderer.RunAsync(args);
 internal static partial class PreviewRenderer
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly MarkdownPipeline Pipeline = new MarkdownPipelineBuilder()
+        .UseAdvancedExtensions()
+        .DisableHtml()
+        .Build();
 
     public static async Task<int> RunAsync(string[] args)
     {
@@ -23,9 +33,11 @@ internal static partial class PreviewRenderer
             var language = NormalizeLanguage(options.Language ?? InferLanguage(root));
             var messages = new List<LogMessage>();
             var provider = new HelpContentProvider(root, language, new ListLogger(messages));
-            var builder = new MarkdownHelpDocumentBuilder();
             var topics = provider.GetAllTopics()
-                .Select(topic => new PreviewTopic(topic.Id, topic.Title, ExtractBody(builder.BuildHtml(topic.Markdown, language))))
+                .Select(topic => new PreviewTopic(
+                    topic.Id,
+                    topic.Title,
+                    RenderTopic(topic.Markdown, provider.GetSourceLines(topic.Id), Path.GetDirectoryName(root)!)))
                 .ToArray();
 
             var response = new PreviewResponse(root, language, topics, messages);
@@ -129,10 +141,73 @@ internal static partial class PreviewRenderer
             ? normalized
             : throw new ArgumentException($"Nicht unterstützter Sprachcode: {language}");
 
-    private static string ExtractBody(string html)
+    private static string RenderTopic(
+        string markdown,
+        IReadOnlyList<HelpSourceLine> sourceLines,
+        string helpRoot)
     {
-        var match = Body().Match(html);
-        return match.Success ? match.Groups[1].Value : html;
+        var document = Markdown.Parse(markdown, Pipeline);
+        AnnotateBlocks(document, sourceLines, helpRoot);
+
+        using var writer = new StringWriter();
+        var renderer = new HtmlRenderer(writer)
+        {
+            LinkRewriter = RewriteLocalImage,
+        };
+        Pipeline.Setup(renderer);
+        renderer.Render(document);
+        writer.Flush();
+        return writer.ToString();
+    }
+
+    private static void AnnotateBlocks(
+        ContainerBlock container,
+        IReadOnlyList<HelpSourceLine> sourceLines,
+        string helpRoot)
+    {
+        foreach (var block in container)
+        {
+            if (block.Line >= 0 && block.Line < sourceLines.Count)
+            {
+                var source = sourceLines[block.Line];
+                var displayPath = Path.GetRelativePath(helpRoot, source.FilePath)
+                    .Replace(Path.DirectorySeparatorChar, '/');
+                var attributes = block.GetAttributes();
+                attributes.AddProperty("data-source-file", source.FilePath);
+                attributes.AddProperty("data-source-line", source.LineNumber.ToString(CultureInfo.InvariantCulture));
+                attributes.AddProperty("title", $"{displayPath}:{source.LineNumber}");
+            }
+
+            if (block is ContainerBlock childContainer)
+            {
+                AnnotateBlocks(childContainer, sourceLines, helpRoot);
+            }
+        }
+    }
+
+    private static string RewriteLocalImage(string url)
+    {
+        if (Uri.TryCreate(url, UriKind.Absolute, out var uri) && !uri.IsFile)
+        {
+            return url;
+        }
+
+        var mimeType = Path.GetExtension(url).ToLowerInvariant() switch
+        {
+            ".gif" => "image/gif",
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".svg" => "image/svg+xml",
+            ".webp" => "image/webp",
+            _ => null,
+        };
+        if (mimeType is null || !Path.IsPathFullyQualified(url) || !File.Exists(url))
+        {
+            return url;
+        }
+
+        var data = Convert.ToBase64String(File.ReadAllBytes(url));
+        return $"data:{mimeType};base64,{data}";
     }
 
     [GeneratedRegex("""^\s*!include\s+(?:<([^>]+)>|"([^"]+)"|(\S+))\s*$""", RegexOptions.IgnoreCase)]
@@ -140,9 +215,6 @@ internal static partial class PreviewRenderer
 
     [GeneratedRegex(@"^ContextHelp(?:\.[^.]+)?\.md$", RegexOptions.IgnoreCase)]
     private static partial Regex RootFileName();
-
-    [GeneratedRegex(@"<body>([\s\S]*)</body>", RegexOptions.IgnoreCase)]
-    private static partial Regex Body();
 
     private sealed record Options(string Document, string? Workspace, string? Root, string? Language)
     {

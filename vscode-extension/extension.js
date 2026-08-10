@@ -6,9 +6,12 @@ const { execFile } = require('child_process');
 let currentPanel;
 let currentDocument;
 let renderTimer;
+let selectedSource;
+let sourceViewColumn = vscode.ViewColumn.One;
 
 function activate(context) {
   context.subscriptions.push(vscode.commands.registerCommand('helpService.openPreview', uri => openPreview(context, uri)));
+  context.subscriptions.push(vscode.commands.registerCommand('helpService.openSource', openSelectedSource));
   context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => {
     if (currentPanel && document.languageId === 'markdown') scheduleRender(context);
   }));
@@ -25,6 +28,7 @@ async function openPreview(context, uri) {
   }
 
   currentDocument = editorUri;
+  sourceViewColumn = vscode.window.activeTextEditor?.viewColumn || sourceViewColumn;
   if (!currentPanel) {
     currentPanel = vscode.window.createWebviewPanel(
       'helpServicePreview',
@@ -32,14 +36,45 @@ async function openPreview(context, uri) {
       vscode.ViewColumn.Beside,
       { enableScripts: true, retainContextWhenHidden: true }
     );
-    currentPanel.onDidDispose(() => { currentPanel = undefined; currentDocument = undefined; });
+    currentPanel.onDidDispose(() => {
+      currentPanel = undefined;
+      currentDocument = undefined;
+      selectedSource = undefined;
+    });
     currentPanel.webview.onDidReceiveMessage(message => {
       if (message.type === 'openExternal') vscode.env.openExternal(vscode.Uri.parse(message.href));
+      else if (message.type === 'selectSource') {
+        selectedSource = typeof message.file === 'string' && Number.isInteger(message.line)
+          ? { file: message.file, line: message.line }
+          : undefined;
+      }
     });
   } else {
     currentPanel.reveal(vscode.ViewColumn.Beside, true);
   }
   await render(context);
+}
+
+async function openSelectedSource() {
+  if (!selectedSource) {
+    vscode.window.showWarningMessage('Für diesen Inhalt ist keine Markdown-Quelldatei hinterlegt.');
+    return;
+  }
+
+  try {
+    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(selectedSource.file));
+    const editor = await vscode.window.showTextDocument(document, {
+      viewColumn: sourceViewColumn,
+      preview: false,
+      preserveFocus: false
+    });
+    const line = Math.max(0, Math.min(selectedSource.line - 1, document.lineCount - 1));
+    const position = new vscode.Position(line, 0);
+    editor.selection = new vscode.Selection(position, position);
+    editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+  } catch (error) {
+    vscode.window.showErrorMessage(`Quelldatei konnte nicht geöffnet werden: ${error.message || String(error)}`);
+  }
 }
 
 function scheduleRender(context) {
@@ -49,6 +84,7 @@ function scheduleRender(context) {
 
 async function render(context) {
   if (!currentPanel || !currentDocument) return;
+  selectedSource = undefined;
   currentPanel.webview.html = loadingHtml();
   try {
     const result = await invokeRenderer(context, currentDocument);
@@ -111,6 +147,17 @@ function previewHtml(result, cspSource) {
         if (href.startsWith('topic:')) { event.preventDefault(); location.hash = 'topic-' + encodeURIComponent(href.slice(6)); }
         else if (/^https?:/i.test(href)) { event.preventDefault(); vscode.postMessage({ type: 'openExternal', href }); }
       });
+      document.querySelectorAll('[data-source-file]').forEach(element => {
+        element.dataset.vscodeContext = JSON.stringify({ webviewSection: 'source' });
+      });
+      document.addEventListener('contextmenu', event => {
+        const source = event.target.closest('[data-source-file]');
+        vscode.postMessage(source ? {
+          type: 'selectSource',
+          file: source.dataset.sourceFile,
+          line: Number.parseInt(source.dataset.sourceLine, 10)
+        } : { type: 'selectSource' });
+      }, true);
     </script></body></html>`;
 }
 
@@ -150,5 +197,5 @@ function escapeHtml(value) { return String(value).replace(/[&<>"']/g, char => ({
 function escapeAttribute(value) { return escapeHtml(value); }
 function randomNonce() { return [...Array(24)].map(() => Math.random().toString(36)[2]).join(''); }
 
-function deactivate() { clearTimeout(renderTimer); }
+function deactivate() { clearTimeout(renderTimer); selectedSource = undefined; }
 module.exports = { activate, deactivate };

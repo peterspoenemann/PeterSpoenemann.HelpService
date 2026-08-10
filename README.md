@@ -263,6 +263,10 @@ Bilder sowie die Markdig-Advanced-Extensions genauso wie die Anwendung an. Eine 
 **HelpService: Vorschau öffnen** angezeigt werden. Bau- und Installationshinweise stehen in der
 [Extension-Dokumentation](vscode-extension/README.md).
 
+Ein Tooltip zeigt an jedem gerenderten Markdown-Block die ursprüngliche Datei und Zeile an.
+Über das Kontextmenü **HelpService: Quelldatei öffnen** springt VS Code direkt zu dieser Stelle;
+bei eingebundenem Inhalt wird die tatsächliche `!include`-Datei geöffnet.
+
 Die jeweils aktuelle fertige Extension kann direkt bei GitHub heruntergeladen werden:
 
 [PeterSpoenemann.HelpService.Preview.vsix herunterladen](https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService/releases/latest/download/PeterSpoenemann.HelpService.Preview.vsix)

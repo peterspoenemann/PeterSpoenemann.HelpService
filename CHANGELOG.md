@@ -6,6 +6,15 @@ die Versionierung folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-10
+
+### Added
+
+- Die VS-Code-Vorschau zeigt für gerenderte Markdown-Blöcke Quelldatei und Originalzeile
+  als Tooltip und öffnet die zugehörige Datei über ein natives Kontextmenü direkt an dieser Stelle.
+- Der Core stellt über `IHelpSourceMapProvider` die Herkunft aufgelöster Markdown-Zeilen bereit,
+  einschließlich genauer Zuordnung für verschachtelte `!include`-Dateien.
+
 ## [0.4.0] - 2026-08-10
 
 ### Added
