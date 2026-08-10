@@ -162,6 +162,7 @@ jobs:
 
           gh release create "$env:GITHUB_REF_NAME" `
             "./artifacts/PeterSpoenemann.HelpService.Preview.vsix#VS Code Extension" `
+            --repo "$env:GITHUB_REPOSITORY" `
             --verify-tag `
             --generate-notes `
             --title "PeterSpoenemann.HelpService $version" `
