@@ -4,6 +4,7 @@ obj/
 artifacts/
 vscode-extension/renderer/
 vscode-extension/*.vsix
+vscode-extension/node_modules/
 TestResults/
 
 ## IDE and user settings

@@ -27,10 +27,23 @@ Sprache fest.
 
 Voraussetzung ist das .NET-10-Runtime-Paket beziehungsweise SDK.
 
+## Installieren
+
+Die jeweils aktuelle fertige VSIX steht im GitHub Release bereit:
+
+[PeterSpoenemann.HelpService.Preview.vsix herunterladen](https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService/releases/latest/download/PeterSpoenemann.HelpService.Preview.vsix)
+
+Anschließend kann sie auf der Kommandozeile installiert werden:
+
+```powershell
+code --install-extension .\PeterSpoenemann.HelpService.Preview.vsix
+```
+
 ## Entwickeln und paketieren
 
 ```powershell
 cd vscode-extension
+npm ci
 npm run build:renderer
 npm run package
 ```
@@ -40,3 +53,7 @@ npm run package
 
 Unter Windows genügt alternativ ein Aufruf von `Build.cmd` im Extension-Ordner. Das
 Skript baut den aktuellen Core und Renderer und erzeugt anschließend die `.vsix`-Datei.
+
+Beim Push eines Tags wie `v0.4.0` setzt der GitHub-Workflow die Extension-Version automatisch
+auf `0.4.0`, baut die VSIX unter dem stabilen Namen
+`PeterSpoenemann.HelpService.Preview.vsix` und hängt sie an das zugehörige GitHub Release an.

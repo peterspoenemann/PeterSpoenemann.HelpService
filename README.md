@@ -263,6 +263,16 @@ Bilder sowie die Markdig-Advanced-Extensions genauso wie die Anwendung an. Eine 
 **HelpService: Vorschau öffnen** angezeigt werden. Bau- und Installationshinweise stehen in der
 [Extension-Dokumentation](vscode-extension/README.md).
 
+Die jeweils aktuelle fertige Extension kann direkt bei GitHub heruntergeladen werden:
+
+[PeterSpoenemann.HelpService.Preview.vsix herunterladen](https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService/releases/latest/download/PeterSpoenemann.HelpService.Preview.vsix)
+
+Danach lässt sie sich über die VS-Code-Oberfläche oder auf der Kommandozeile installieren:
+
+```powershell
+code --install-extension .\PeterSpoenemann.HelpService.Preview.vsix
+```
+
 ## Lizenz
 
 Dieses Projekt steht unter der [MIT-Lizenz](LICENSE). Copyright © 2026 Peter Spönemann.

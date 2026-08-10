@@ -1,9 +1,21 @@
 @echo off
-setlocal
+setlocal EnableExtensions EnableDelayedExpansion
 
 pushd "%~dp0" || exit /b 1
 
 echo Building HelpService VS Code extension...
+if not exist "node_modules\.bin\vsce.cmd" (
+    echo Installing build dependencies...
+    call npm ci
+    if errorlevel 1 (
+        set "BUILD_EXIT_CODE=!ERRORLEVEL!"
+        echo.
+        echo Dependency installation failed with exit code !BUILD_EXIT_CODE!.
+        popd
+        exit /b !BUILD_EXIT_CODE!
+    )
+)
+
 call npm run package
 set "BUILD_EXIT_CODE=%ERRORLEVEL%"
 

@@ -1,22 +1,21 @@
-name: Publish NuGet package
+name: Publish release
 
 on:
   push:
     tags:
       - "v*"
 
-permissions:
-  contents: read
-  id-token: write
-
 env:
   DOTNET_VERSION: 10.0.x
+  NODE_VERSION: 24.x
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
 
 jobs:
-  publish:
-    name: Build, test and publish
+  build:
+    name: Build and test release artifacts
     runs-on: windows-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -27,15 +26,21 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Determine package version
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+
+      - name: Determine release version
         shell: pwsh
         run: |
           $version = $env:GITHUB_REF_NAME -replace '^v', ''
           if ([string]::IsNullOrWhiteSpace($version)) {
-            throw 'Could not determine package version.'
+            throw 'Could not determine release version.'
           }
           "PACKAGE_VERSION=$version" >> $env:GITHUB_ENV
-          Write-Host "Publishing version $version"
+          Write-Host "Building release version $version"
 
       - name: Restore
         run: dotnet restore
@@ -46,7 +51,7 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release --no-build
 
-      - name: Pack
+      - name: Pack NuGet packages
         shell: pwsh
         run: |
           $projects = @(
@@ -61,13 +66,60 @@ jobs:
               -p:PackageVersion="$env:PACKAGE_VERSION"
           }
 
+      - name: Set VS Code extension version
+        shell: pwsh
+        run: |
+          npm --prefix vscode-extension version `
+            "$env:PACKAGE_VERSION" `
+            --no-git-tag-version `
+            --allow-same-version
+
+      - name: Install VS Code extension dependencies
+        run: npm --prefix vscode-extension ci
+
+      - name: Build VS Code extension
+        shell: pwsh
+        run: |
+          npm --prefix vscode-extension run package -- `
+            --out "../artifacts/PeterSpoenemann.HelpService.Preview.vsix"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-artifacts
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+            artifacts/*.vsix
+          if-no-files-found: error
+
+  publish-nuget:
+    name: Publish NuGet packages
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: release-artifacts
+          path: artifacts
+
       - name: NuGet login
         id: nuget-login
         uses: NuGet/login@v1
         with:
           user: ${{ secrets.NUGET_USER }}
 
-      - name: Publish NuGet package
+      - name: Publish NuGet packages
         shell: pwsh
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
@@ -82,3 +134,35 @@ jobs:
               --source $env:NUGET_SOURCE `
               --skip-duplicate
           }
+
+  github-release:
+    name: Create GitHub release
+    needs: [build, publish-nuget]
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: release-artifacts
+          path: artifacts
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $releaseOptions = @()
+          if ($version.Contains('-')) {
+            $releaseOptions += '--prerelease'
+          }
+
+          gh release create "$env:GITHUB_REF_NAME" `
+            "./artifacts/PeterSpoenemann.HelpService.Preview.vsix#VS Code Extension" `
+            --verify-tag `
+            --generate-notes `
+            --title "PeterSpoenemann.HelpService $version" `
+            @releaseOptions

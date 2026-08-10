@@ -13,9 +13,20 @@
   "engines": {
     "vscode": "^1.95.0"
   },
-  "categories": ["Other", "Visualization"],
-  "keywords": ["markdown", "markdig", "help", "include", "preview"],
-  "activationEvents": ["onCommand:helpService.openPreview"],
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "markdown",
+    "markdig",
+    "help",
+    "include",
+    "preview"
+  ],
+  "activationEvents": [
+    "onCommand:helpService.openPreview"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
@@ -51,7 +62,12 @@
         },
         "helpService.preview.language": {
           "type": "string",
-          "enum": ["auto", "de", "en", "pl"],
+          "enum": [
+            "auto",
+            "de",
+            "en",
+            "pl"
+          ],
           "default": "auto",
           "description": "Sprache für Rendering und Root-Auswahl."
         },
@@ -66,6 +82,9 @@
   "scripts": {
     "build:renderer": "dotnet publish ../src/HelpService.VsCodeRenderer/PeterSpoenemann.HelpService.VsCodeRenderer.csproj --configuration Release --output renderer --no-self-contained",
     "vscode:prepublish": "npm run build:renderer",
-    "package": "npx @vscode/vsce package"
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "3.9.2"
   }
 }
