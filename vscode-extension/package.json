@@ -1,0 +1,71 @@
+{
+  "name": "peterspoenemann-helpservice-preview",
+  "displayName": "PeterSpoenemann HelpService Preview",
+  "description": "Vorschau für HelpService-Markdown mit !include und Markdig Advanced Extensions.",
+  "version": "0.1.0",
+  "publisher": "peterspoenemann",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PeterSpoenemann/PeterSpoenemann.HelpService.git",
+    "directory": "vscode-extension"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["Other", "Visualization"],
+  "keywords": ["markdown", "markdig", "help", "include", "preview"],
+  "activationEvents": ["onCommand:helpService.openPreview"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "helpService.openPreview",
+        "title": "HelpService: Vorschau öffnen",
+        "icon": "$(open-preview)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "helpService.openPreview",
+          "when": "resourceExtname == .md",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "helpService.openPreview",
+          "when": "resourceExtname == .md",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "HelpService Preview",
+      "properties": {
+        "helpService.preview.rootFile": {
+          "type": "string",
+          "default": "",
+          "description": "Optionale ContextHelp*.md-Wurzeldatei, absolut oder relativ zum Workspace. Leer bedeutet automatische Erkennung."
+        },
+        "helpService.preview.language": {
+          "type": "string",
+          "enum": ["auto", "de", "en", "pl"],
+          "default": "auto",
+          "description": "Sprache für Rendering und Root-Auswahl."
+        },
+        "helpService.preview.dotnetPath": {
+          "type": "string",
+          "default": "dotnet",
+          "description": "Pfad zum dotnet-Programm."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build:renderer": "dotnet publish ../src/HelpService.VsCodeRenderer/PeterSpoenemann.HelpService.VsCodeRenderer.csproj --configuration Release --output renderer --no-self-contained",
+    "vscode:prepublish": "npm run build:renderer",
+    "package": "npx @vscode/vsce package"
+  }
+}

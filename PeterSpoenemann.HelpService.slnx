@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/HelpService.Core/PeterSpoenemann.HelpService.Core.csproj" />
+    <Project Path="src/HelpService.VsCodeRenderer/PeterSpoenemann.HelpService.VsCodeRenderer.csproj" />
     <Project Path="src/HelpService/PeterSpoenemann.HelpService.csproj" />
   </Folder>
   <Folder Name="/tests/">

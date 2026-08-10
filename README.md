@@ -254,6 +254,15 @@ geöffneten Hilfefensters zur Laufzeit zwischen Deutsch, Englisch und Polnisch w
 dotnet run --project samples/PeterSpoenemann.HelpService.Sample/PeterSpoenemann.HelpService.Sample.csproj
 ```
 
+## VS-Code-Vorschau
+
+Unter [`vscode-extension`](vscode-extension) liegt eine passende VS-Code-Extension. Ihre Vorschau
+verwendet den .NET-Core dieses Projekts und zeigt daher `!include`, Themenüberschriften, relative
+Bilder sowie die Markdig-Advanced-Extensions genauso wie die Anwendung an. Eine geöffnete
+`ContextHelp*.md`-Datei oder eine von ihr eingebundene Themendatei kann über
+**HelpService: Vorschau öffnen** angezeigt werden. Bau- und Installationshinweise stehen in der
+[Extension-Dokumentation](vscode-extension/README.md).
+
 ## Lizenz
 
 Dieses Projekt steht unter der [MIT-Lizenz](LICENSE). Copyright © 2026 Peter Spönemann.

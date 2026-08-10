@@ -1,0 +1,5 @@
+.gitignore
+Build.cmd
+README.md
+renderer/*.pdb
+renderer/*.xml

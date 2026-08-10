@@ -2,6 +2,8 @@
 bin/
 obj/
 artifacts/
+vscode-extension/renderer/
+vscode-extension/*.vsix
 TestResults/
 
 ## IDE and user settings
